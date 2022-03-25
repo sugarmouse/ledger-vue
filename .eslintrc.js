@@ -13,7 +13,8 @@ module.exports = {
   },
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'vue/script-indent': ['error', 2, {'baseIndent': 1}]
   },
   overrides: [
     {
@@ -23,6 +24,12 @@ module.exports = {
       ],
       env: {
         jest: true
+      }
+    },
+    {
+      'files':['*.vue'],
+      'rules':{
+        'indent':'off'
       }
     }
   ]
