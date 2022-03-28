@@ -1,6 +1,6 @@
 <template>
   <Layout class-prefix="layout">
-    <NumberPad @update-output="onUpdateOutput"/>
+    <NumberPad @update-output="onUpdateOutput" @submit="saveRecord"/>
     <Notes @update-notes="onUpdateNotes"/>
     <Types :type.sync="record.type"/>
     <Tags :data-source.sync="tags" @update-tags="onUpdateTags"/>
@@ -27,6 +27,7 @@
   })
   export default class Money extends Vue {
     tags = ['衣', '食', '住', '行'];
+    recordList: Record[] = [];
     record: Record = {
       tags: [],
       notes: '',
@@ -35,19 +36,23 @@
     };
 
     onUpdateOutput(output: string) {
-      this.record.amount = parseFloat(output)
+      this.record.amount = parseFloat(output);
     }
 
     onUpdateNotes(notes: string) {
-      this.record.notes = notes
+      this.record.notes = notes;
     }
 
-    // onUpdateType(type: string) {
-    //   this.record.type = type
-    // }
 
     onUpdateTags(tags: string[]) {
-      this.record.tags = tags
+      this.record.tags = tags;
+    }
+
+    saveRecord() {
+      console.log(this.recordList);
+      const x = JSON.parse(JSON.stringify(this.record));
+      this.recordList.push(x);
+      localStorage.setItem('recordList', JSON.stringify(this.recordList));
     }
 
   }
