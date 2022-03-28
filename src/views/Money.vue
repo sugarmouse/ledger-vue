@@ -2,7 +2,11 @@
   <Layout class-prefix="layout">
     <NumberPad @update-output="onUpdateOutput" @submit="saveRecord"/>
     <div class="notes">
-      <FormItem @update-notes="onUpdateNotes" field-name="备注" placeholder="在这里输入备注"/>
+      <FormItem
+          :value="''"
+          @update-value="onUpdateNotes"
+          field-name="备注"
+          placeholder="在这里输入备注"/>
     </div>
     <Types :type.sync="record.type"/>
     <Tags :data-source.sync="tags" @update-tags="onUpdateTags"/>
@@ -26,7 +30,7 @@
   export default class Money extends Vue {
     tags = ['衣', '食', '住', '行'];
     recordList = recordListModel.fetch();
-    tagList = tagListModel.fetch()
+    tagList = tagListModel.fetch();
     record: RecordItem = {
       tags: [],
       notes: '',
@@ -66,7 +70,8 @@
   display: flex;
   flex-direction: column-reverse;
 }
-.notes{
+
+.notes {
   padding: 12px 0;
 }
 </style>
