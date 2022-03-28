@@ -1,5 +1,5 @@
 const localStorageName = 'recordList';
-const model = {
+const recordListModel = {
   fetch() {
     return JSON.parse(window.localStorage.getItem(localStorageName) || '[]') as RecordItem[];
   },
@@ -11,4 +11,4 @@ const model = {
   }
 };
 
-export {model};
+export {recordListModel};
