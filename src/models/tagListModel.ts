@@ -1,9 +1,14 @@
 const localStorageName = 'tagList';
 
+type Tag = {
+  id: string;
+  name: string;
+}
+
 interface TagListModel {
-  data: string[];
-  fetch: () => string[];
-  add: (name: string) => 'success'|'duplicated';
+  data: Tag[];
+  fetch: () => Tag[];
+  add: (name: string) => 'success' | 'duplicated';
   save: () => void;
 }
 
@@ -14,10 +19,10 @@ const tagListModel: TagListModel = {
     return this.data;
   },
   add(name: string) {
-    if (this.data.indexOf(name) >= 0) {return 'duplicated'}
-    this.data.push(name);
+    const tagsName = this.data.map(item => item.name);
+    if (tagsName.indexOf(name) >= 0) {return 'duplicated';}
+    this.data.push({id: name, name: name});
     return 'success';
-
   },
   save() {
     window.localStorage.setItem(localStorageName, JSON.stringify(this.data));
