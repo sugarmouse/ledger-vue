@@ -1,12 +1,14 @@
 <template>
   <div>
     <Layout>
-      <ol class="tags">
-        <li class="tag" v-for="tag in tagList" :key="tag.id">
+      <div class="tags">
+        <router-link
+            :to="`/labels/edit/${tag.id}`"
+            class="tag" v-for="tag in tagList" :key="tag.id">
           <span>{{ tag.name }}</span>
           <Icon name="right"/>
-        </li>
-      </ol>
+        </router-link>
+      </div>
       <div class="createTag-wrapper">
         <button class="createTag" @click="addTag">新建标签</button>
       </div>
