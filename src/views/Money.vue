@@ -13,13 +13,14 @@
   import Notes from '@/components/Money/Notes.vue';
   import Tags from '@/components/Money/Tags.vue';
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, Watch} from 'vue-property-decorator';
 
   type Record = {
     tags: string[]
     notes: string
     type: string
     amount: number
+    createdAt?: Date
   }
 
   @Component({
@@ -34,6 +35,10 @@
       type: '-',
       amount: 0
     };
+
+    created() {
+      this.recordList = JSON.parse(window.localStorage.getItem('recordList') || '[]');
+    }
 
     onUpdateOutput(output: string) {
       this.record.amount = parseFloat(output);
@@ -50,11 +55,15 @@
 
     saveRecord() {
       console.log(this.recordList);
-      const x = JSON.parse(JSON.stringify(this.record));
+      const x: Record = JSON.parse(JSON.stringify(this.record));
+      x.createdAt = new Date();
       this.recordList.push(x);
-      localStorage.setItem('recordList', JSON.stringify(this.recordList));
     }
 
+    @Watch('recordList')
+    onRecordListChanged() {
+      window.localStorage.setItem('recordList', JSON.stringify(this.recordList));
+    }
   }
 </script>
 
