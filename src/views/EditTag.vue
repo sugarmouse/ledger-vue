@@ -1,17 +1,18 @@
 <template>
   <Layout>
     <div class="navBar">
-      <Icon class="leftIcon" name="left"></Icon>
+      <Icon class="leftIcon" name="left" @click="goBack"></Icon>
       <span>编辑标签</span>
       <span class="rightIcon"></span>
     </div>
     <div class="form-wrapper">
       <FormItem field-name="标签名"
-                :value = "tag.name"
+                :value="tag.name"
+                @update-value="onUpdateTag"
                 placeholder="在这里输入标签名"></FormItem>
     </div>
     <div class="button-wrapper">
-      <Button>删除标签</Button>
+      <Button @click="remove">删除标签</Button>
     </div>
   </Layout>
 </template>
@@ -29,7 +30,7 @@
     components: {Button, FormItem, Icon, Layout}
   })
   export default class EditTag extends Vue {
-    tag?:Tag = undefined
+    tag?: Tag = undefined;
 
     created() {
       const id = this.$route.params.id;
@@ -38,13 +39,30 @@
 
       const tag = tags.filter(tag => tag.id === id)[0];
       if (tag) {
-        this.tag = tag
-        console.log(tag);
+        this.tag = tag;
       } else {
         this.$router.replace('/404');
       }
     }
 
+    onUpdateTag(name: string) {
+      if (this.tag) {
+        tagListModel.update(this.tag.id, name);
+        tagListModel.save()
+      }
+    }
+
+    remove() {
+      console.log('=======');
+      if (this.tag) {
+        tagListModel.remove(this.tag.id);
+        tagListModel.save()
+        this.$router.replace('/tags')
+      }
+    }
+    goBack(){
+      this.$router.replace('/tags')
+    }
   }
 </script>
 

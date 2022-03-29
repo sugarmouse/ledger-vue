@@ -19,7 +19,7 @@ const routes: Array<RouteConfig> = [
     component: Money
   },
   {
-    path: '/labels',
+    path: '/tags',
     component: Tags
   },
   {
