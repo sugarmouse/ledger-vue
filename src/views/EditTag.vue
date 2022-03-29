@@ -22,7 +22,6 @@
   import Icon from '@/components/Icon.vue';
   import Layout from '@/components/layout.vue';
   import {Component} from 'vue-property-decorator';
-  import {tagListModel} from '@/models/tagListModel';
   import FormItem from '@/components/FormItem.vue';
   import Button from '@/components/Button.vue';
 
@@ -33,34 +32,30 @@
     tag?: Tag = undefined;
 
     created() {
-      const id = this.$route.params.id;
-      tagListModel.fetch();
-      const tags = tagListModel.data;
-
-      const tag = tags.filter(tag => tag.id === id)[0];
-      if (tag) {
-        this.tag = tag;
-      } else {
+      this.tag = window.findTag(this.$route.params.id);
+      if (!this.tag) {
         this.$router.replace('/404');
       }
     }
 
     onUpdateTag(name: string) {
       if (this.tag) {
-        tagListModel.update(this.tag.id, name);
-        tagListModel.save()
+        window.updateTag(this.tag.id, name);
       }
     }
 
     remove() {
       if (this.tag) {
-        tagListModel.remove(this.tag.id);
-        tagListModel.save()
-        this.$router.replace('/tags')
+        if (window.removeTag(this.tag.id)) {
+          this.$router.replace('/tags');
+        } else {
+          window.alert('删除失败');
+        }
       }
     }
-    goBack(){
-      this.$router.replace('/tags')
+
+    goBack() {
+      this.$router.replace('/tags');
     }
   }
 </script>

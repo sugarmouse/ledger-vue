@@ -22,10 +22,8 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import Icon from '@/components/Icon.vue';
-  import {tagListModel} from '@/models/tagListModel';
   import Button from '@/components/Button.vue';
 
-  tagListModel.fetch();
   @Component({
     components: {Button, Icon}
   })
@@ -35,12 +33,7 @@
     addTag() {
       const name = window.prompt('请输入标签名');
       if (name) {
-        const isAdd = tagListModel.add(name);
-        if (isAdd === 'duplicated') {
-          alert('标签名不能重复');
-          return;
-        }
-        tagListModel.save();
+        window.createTag(name)
       }
     }
   }
