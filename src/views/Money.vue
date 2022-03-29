@@ -48,7 +48,7 @@
     }
 
 
-    onUpdateTags(tags: string[]) {
+    onUpdateTags(tags: Tag[]) {
       this.record.tags = tags;
     }
 

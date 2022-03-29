@@ -7,6 +7,7 @@
     </div>
     <div class="form-wrapper">
       <FormItem field-name="标签名"
+                :value = "tag.name"
                 placeholder="在这里输入标签名"></FormItem>
     </div>
     <div class="button-wrapper">
@@ -27,21 +28,21 @@
   @Component({
     components: {Button, FormItem, Icon, Layout}
   })
-  export default class EditLabel extends Vue {
-    name = '';
+  export default class EditTag extends Vue {
+    tag?:Tag = undefined
 
     created() {
       const id = this.$route.params.id;
-      this.name = id;
       tagListModel.fetch();
       const tags = tagListModel.data;
+
       const tag = tags.filter(tag => tag.id === id)[0];
       if (tag) {
+        this.tag = tag
         console.log(tag);
       } else {
         this.$router.replace('/404');
       }
-
     }
 
   }

@@ -1,10 +1,5 @@
 const localStorageName = 'tagList';
 
-type Tag = {
-  id: string;
-  name: string;
-}
-
 interface TagListModel {
   data: Tag[];
   fetch: () => Tag[];
