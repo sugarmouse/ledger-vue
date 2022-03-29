@@ -23,17 +23,18 @@
   import {Component} from 'vue-property-decorator';
   import Icon from '@/components/Icon.vue';
   import Button from '@/components/Button.vue';
+  import store from '@/store/index2';
 
   @Component({
     components: {Button, Icon}
   })
   export default class Tags extends Vue {
-    tagList = window.tagList;
+    tagList = store.tagList;
 
     addTag() {
       const name = window.prompt('请输入标签名');
       if (name) {
-        window.createTag(name)
+        store.createTag(name)
       }
     }
   }

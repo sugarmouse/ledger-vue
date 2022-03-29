@@ -16,13 +16,3 @@ interface TagListModel {
 }
 
 type Tag = { id: string, name: string }
-
-interface Window {
-  tagList: Tag[];
-  createTag: (name: string) => void;
-  removeTag: (id: string) => boolean;
-  updateTag: (id: string, name: string) => 'success' | 'notFound' | 'duplicated';
-  findTag: (id: string) => Tag;
-  recordList: RecordItem[];
-  createRecord: (RecordItem) => void;
-}
