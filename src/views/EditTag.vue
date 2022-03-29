@@ -53,7 +53,6 @@
     }
 
     remove() {
-      console.log('=======');
       if (this.tag) {
         tagListModel.remove(this.tag.id);
         tagListModel.save()

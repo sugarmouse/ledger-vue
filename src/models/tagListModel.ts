@@ -1,3 +1,5 @@
+import createId from '@/lib/idCreator';
+
 const localStorageName = 'tagList';
 
 interface TagListModel {
@@ -18,7 +20,7 @@ const tagListModel: TagListModel = {
   add(name: string) {
     const tagsName = this.data.map(item => item.name);
     if (tagsName.indexOf(name) >= 0) {return 'duplicated';}
-    this.data.push({id: name, name: name});
+    this.data.push({id: createId().toString(), name: name});
     return 'success';
   },
   update(id, name) {
@@ -30,7 +32,6 @@ const tagListModel: TagListModel = {
       } else {
         const tag = this.data.filter(item => item.id === id)[0];
         tag.name = name;
-        tag.id = name;
         this.save();
         return 'success';
       }
