@@ -7,8 +7,9 @@ import Nav from '@/components/nav.vue';
 import Layout from '@/components/layout.vue';
 import Icon from '@/components/Icon.vue';
 import {tagListModel} from '@/models/tagListModel';
-import resetModuleRegistry = jest.resetModuleRegistry;
+import {recordListModel} from '@/models/recordListModel';
 
+// tags store
 Vue.config.productionTip = false;
 Vue.component('Nav', Nav);
 Vue.component('Layout', Layout);
@@ -38,7 +39,11 @@ window.updateTag = (id: string, name: string) => {
 window.findTag = (id) => {
   return window.tagList.filter(tag => tag.id === id)[0];
 };
-
+// recordList store
+window.recordList = recordListModel.fetch();
+window.createRecord = (record) => {
+ return  recordListModel.create(record);
+};
 
 new Vue({
   router,
