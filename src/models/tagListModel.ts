@@ -2,14 +2,7 @@ import createId from '@/lib/idCreator';
 
 const localStorageName = 'tagList';
 
-interface TagListModel {
-  data: Tag[];
-  fetch: () => Tag[];
-  add: (name: string) => 'success' | 'duplicated';
-  update: (id: string, name: string) => 'success' | 'notFound' | 'duplicated';
-  remove: (id: string) => boolean;
-  save: () => void;
-}
+
 
 const tagListModel: TagListModel = {
   data: [],
