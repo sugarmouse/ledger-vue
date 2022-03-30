@@ -9,7 +9,7 @@
           placeholder="在这里输入备注"/>
     </div>
     <Types :type.sync="record.type"/>
-    <Tags :data-source.sync="tags" @update-tags="onUpdateTags"/>
+    <Tags/>
   </Layout>
 </template>
 
@@ -24,11 +24,14 @@
 
   const recordList = store.recordList;
   @Component({
-    components: {Tags, FormItem, Types, NumberPad}
+    components: {Tags, FormItem, Types, NumberPad},
+    computed:{
+      recordList () {
+        return store.recordList
+      }
+    }
   })
   export default class Money extends Vue {
-    tags = store.tagList;
-    recordList = store.recordList;
     record: RecordItem = {
       tags: [],
       notes: '',
@@ -45,13 +48,8 @@
       this.record.notes = notes;
     }
 
-
-    onUpdateTags(tags: Tag[]) {
-      this.record.tags = tags;
-    }
-
     saveRecord() {
-      store.createRecord(this.record)
+      store.createRecord(this.record);
     }
   }
 </script>
