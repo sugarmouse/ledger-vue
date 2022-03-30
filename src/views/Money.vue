@@ -20,16 +20,10 @@
   import Tags from '@/components/Money/Tags.vue';
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import store from '@/store/index2';
+  import store from '@/store';
 
-  const recordList = store.recordList;
   @Component({
     components: {Tags, FormItem, Types, NumberPad},
-    computed:{
-      recordList () {
-        return store.recordList
-      }
-    }
   })
   export default class Money extends Vue {
     record: RecordItem = {
@@ -39,6 +33,13 @@
       amount: 0
     };
 
+    get recordList() {
+      return store.state.recordList;
+    }
+
+    created() {
+      store.commit('fetchRecords');
+    }
 
     onUpdateOutput(output: string) {
       this.record.amount = parseFloat(output);
@@ -49,7 +50,7 @@
     }
 
     saveRecord() {
-      store.createRecord(this.record);
+      store.commit('createRecord', this.record);
     }
   }
 </script>

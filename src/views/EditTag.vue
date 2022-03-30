@@ -7,8 +7,8 @@
     </div>
     <div class="form-wrapper">
       <FormItem field-name="标签名"
-                :value="tag.name"
-                @update-value="onUpdateTag"
+                :value="currentTag.name"
+                @update-value="updateTag"
                 placeholder="在这里输入标签名"></FormItem>
     </div>
     <div class="button-wrapper">
@@ -24,34 +24,36 @@
   import {Component} from 'vue-property-decorator';
   import FormItem from '@/components/FormItem.vue';
   import Button from '@/components/Button.vue';
-  import store from '@/store/index2';
+  import store from '@/store';
 
   @Component({
-    components: {Button, FormItem, Icon, Layout}
+    components: {Button, FormItem, Icon, Layout},
   })
   export default class EditTag extends Vue {
-    tag?: Tag = undefined;
+    get currentTag() {
+      return store.state.currentTag;
+    }
 
     created() {
-      this.tag = store.findTag(this.$route.params.id);
-      if (!this.tag) {
+      const id = this.$route.params.id;
+      store.commit('fetchTags')
+      store.commit('setCurrentTag', id);
+
+      if (!this.currentTag) {
         this.$router.replace('/404');
       }
     }
 
-    onUpdateTag(name: string) {
-      if (this.tag) {
-        store.updateTag(this.tag.id, name);
+    updateTag(name: string) {
+      if (this.currentTag) {
+        store.commit('updateTag', {id: this.currentTag.id, name});
       }
     }
 
     remove() {
-      if (this.tag) {
-        if (store.removeTag(this.tag.id)) {
-          this.$router.replace('/tags');
-        } else {
-          window.alert('删除失败');
-        }
+      if (this.currentTag) {
+        store.commit('removeTag', this.currentTag.id);
+        this.$router.replace('/tags');
       }
     }
 

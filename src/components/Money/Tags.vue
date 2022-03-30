@@ -13,14 +13,23 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import store from '@/store/index2';
+  import store from '@/store';
+  import {mixins} from 'vue-class-component';
+  import {TagHelper} from '@/mixins/TagHelper';
 
   @Component
-  export default class Tags extends Vue {
+  export default class Tags extends mixins(TagHelper) {
     selectedTags: string[] = [];
-    tagList = store.tagList;
+
+    get tagList() {
+      return store.state.tagList;
+    }
+
+    created() {
+      store.commit('fetchTags');
+    }
+
 
     toggle(tag: string) {
       const index = this.selectedTags.indexOf(tag);
@@ -30,12 +39,6 @@
         this.selectedTags.push(tag);
       }
       this.$emit('update-tags', this.selectedTags);
-    }
-
-    addTag() {
-      const name = window.prompt('请输入标签名：');
-      if (!name) {return window.alert('标签名不能为空');}
-      store.createTag(name);
     }
   }
 </script>
