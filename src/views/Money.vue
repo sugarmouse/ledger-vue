@@ -20,7 +20,7 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import store from '@/store';
-  import Tabs from '@/components/statistics/tabs.vue';
+  import Tabs from '@/components/tabs.vue';
   import typeList from '@/constants/typeList';
 
   @Component({

@@ -12,7 +12,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import Tabs from '@/components/statistics/tabs.vue';
+  import Tabs from '@/components/tabs.vue';
   import typeList from '@/constants/typeList';
   import intervalList from '@/constants/intervalList';
 
@@ -37,6 +37,11 @@
     &::after {
       display: none;
     }
+  }
+}
+.interval-tabs::v-deep {
+  .interval-tabs-item {
+    height: 48px;
   }
 }
 
