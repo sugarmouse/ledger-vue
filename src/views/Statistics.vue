@@ -1,18 +1,16 @@
 <template>
   <div>
     <Layout>
-
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
-      <Tabs :data-source="intervalData" class-prefix="interval" :value.sync="selectedInterval"/>
       <ol>
-        <li v-for="(group,index) in result" :key="index">
-          <h3 class="title">{{ group.title }}</h3>
+        <li v-for="(groupedRecords,index) in groupedList" :key="index">
+          <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{groupedRecords.total}}</span></h3>
           <ol>
-            <li v-for="item in group.items" :key="item.createdAt" class="record">
-              <span>{{ tagString(item.tags) }}</span>
-              <span class="notes">{{ item.notes }}</span>
-              <span>￥{{ item.amount }}</span>
-
+            <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
+              <span v-if="record.tags.length === 0">无</span>
+              <span v-else v-for="tag in record.tags" :key="tag.id">{{ tag.name }}</span>
+              <span class="notes">{{ record.notes }}</span>
+              <span>￥{{ record.amount }}</span>
             </li>
           </ol>
         </li>
@@ -26,55 +24,78 @@
   import {Component} from 'vue-property-decorator';
   import Tabs from '@/components/tabs.vue';
   import typeList from '@/constants/typeList';
-  import intervalList from '@/constants/intervalList';
   import store from '@/store';
+  import dayjs from 'dayjs';
+  import clone from '@/lib/clone';
 
+  const oneDay = 86400 * 1000;
   @Component({
     components: {Tabs}
   })
   export default class Statistics extends Vue {
+    selectedType = '-';
+    typeData = typeList;
+
     created() {
       store.commit('fetchRecords');
-    }
-
-    tagString(tags: Tag[]) {
-      return tags.length === 0 ? '无' : tags.join(',');
     }
 
     get recordList() {
       return store.state.recordList;
     }
 
-    get result() {
+    get groupedList() {
 
-      const recordList = this.recordList;
-      type HashTableValue = { title: string, items: RecordItem[] }
-      const hashTable: { [key: string]: HashTableValue } = {};
-      for (let i = 0; i < recordList.length; i++) {
-        const [date, time] = recordList[i].createdAt!.split('T');
-        console.log(date);
-        hashTable[date] = hashTable[date] || {title: date, items: []};
-        hashTable[date].items.push(recordList[i]);
+      const recordList = clone(this.recordList);
+      if (recordList.length === 0) return [];
+
+      const sortedRecordList = recordList
+          .filter(r => r.type === this.selectedType)
+          .sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
+          .reverse();
+      type Result = { title: string, total?: number, items: RecordItem[] }[]
+      const result: Result = [{
+        title: dayjs(sortedRecordList[0].createdAt).format('YYYY-MM-DD'),
+        items: [sortedRecordList[0]]
+      }];
+
+      for (let i = 1; i < sortedRecordList.length; i++) {
+        const current = sortedRecordList[i];
+        const last = result[result.length - 1];
+        if (dayjs(last.title).isSame(dayjs(current.createdAt), 'day')) {
+          last.items.push(sortedRecordList[i]);
+        } else {
+          result.push({title: dayjs(sortedRecordList[i].createdAt).format('YYYY-MM-DD'), items: [sortedRecordList[i]]});
+        }
       }
-      console.log(hashTable);
-      return hashTable;
+      result.map(group => {
+        group.total = group.items.reduce((sum, item) => sum + item.amount, 0);
+      });
+      return result;
     }
 
-    selectedType = '-';
-    selectedInterval = 'day';
-    typeData = typeList;
-    intervalData = intervalList;
 
-
+    beautifyDate(date: string) {
+      const now = new Date();
+      const day = dayjs(date);
+      const toNowInDay = (n: number) => {
+        return day.isSame(now.valueOf() - oneDay * n, 'day');
+      };
+      if (toNowInDay(0)) return '今天';
+      if (toNowInDay(1)) return '昨天';
+      if (toNowInDay(2)) return '前天';
+      if (day.isSame(now, 'year')) return day.format('MM月DD日');
+      return day.format('YYYY年MM月DD日');
+    }
   }
 </script>
 
 <style lang="scss" scoped>
 ::v-deep .types-tabs-item {
-  background: #ffffff;
+  background: #c4c4c4;
 
   &.selected {
-    background-color: #c4c4c4;
+    background-color: #fff;
 
     &::after {
       display: none;
@@ -104,10 +125,11 @@
   background: #ffffff;
   @extend %item
 }
-.notes{
+
+.notes {
   margin-right: auto;
   margin-left: 8px;
-  color:#999;
+  color: #999;
 }
 
 
