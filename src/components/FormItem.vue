@@ -22,7 +22,7 @@
     @Prop({default:''}) value!:string
 
     onValueChange(value: string) {
-      this.$emit('update-value', value);
+      this.$emit('update:value', value);
     }
 
   }

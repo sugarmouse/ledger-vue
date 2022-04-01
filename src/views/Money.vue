@@ -1,15 +1,19 @@
 <template>
   <Layout class-prefix="layout">
-    <NumberPad @update-output="onUpdateOutput" @submit="saveRecord"/>
+    <NumberPad
+        @update-output="onUpdateOutput"
+        @submit="saveRecord"/>
     <div class="notes">
       <FormItem
-          :value="''"
-          @update-value="onUpdateNotes"
+          :value.sync="record.notes"
           field-name="备注"
           placeholder="在这里输入备注"/>
     </div>
-    <Tabs :data-source="typeData" class-prefix="types" :value.sync="record.type"/>
-    <Tags/>
+    <Tabs :data-source="typeData"
+          class-prefix="types"
+          :value.sync="record.type"/>
+    <Tags @update-tags="record.tags = $event"
+          :value="record.tags"/>
   </Layout>
 </template>
 
@@ -47,12 +51,16 @@
       this.record.amount = parseFloat(output);
     }
 
-    onUpdateNotes(notes: string) {
-      this.record.notes = notes;
-    }
 
     saveRecord() {
+      if(!this.record.tags||this.record.tags.length===0){
+        window.alert('请至少选择一个标签')
+        return;
+      }
       store.commit('createRecord', this.record);
+      window.alert('保存成功')
+      this.record.notes = ''
+      this.record.tags = []
     }
   }
 </script>

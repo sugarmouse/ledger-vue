@@ -2,8 +2,8 @@
   <div>
     <Layout>
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
-      <ol>
-        <li v-for="(groupedRecords,index) in groupedList" :key="index">
+      <ol v-if="groupedList.length>0">
+        <li  v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
           <ol>
             <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
@@ -15,6 +15,7 @@
           </ol>
         </li>
       </ol>
+      <div v-else class="noResult">目前没有相关记录</div>
     </Layout>
   </div>
 </template>
@@ -94,6 +95,10 @@
 </script>
 
 <style lang="scss" scoped>
+.noResult{
+  padding: 16px;
+  text-align: center;
+}
 ::v-deep .types-tabs-item {
   background: #c4c4c4;
 
