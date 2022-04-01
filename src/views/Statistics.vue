@@ -4,7 +4,7 @@
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
       <ol>
         <li v-for="(groupedRecords,index) in groupedList" :key="index">
-          <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{groupedRecords.total}}</span></h3>
+          <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
           <ol>
             <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
               <span v-if="record.tags.length === 0">无</span>
@@ -29,6 +29,7 @@
   import clone from '@/lib/clone';
 
   const oneDay = 86400 * 1000;
+  type Result = { title: string, total?: number, items: RecordItem[] }[]
   @Component({
     components: {Tabs}
   })
@@ -36,15 +37,16 @@
     selectedType = '-';
     typeData = typeList;
 
-    created() {
+    created(): void {
       store.commit('fetchRecords');
+      return;
     }
 
-    get recordList() {
+    get recordList(): RecordItem[] {
       return store.state.recordList;
     }
 
-    get groupedList() {
+    get groupedList(): Result {
 
       const recordList = clone(this.recordList);
       if (recordList.length === 0) return [];
@@ -53,7 +55,8 @@
           .filter(r => r.type === this.selectedType)
           .sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
           .reverse();
-      type Result = { title: string, total?: number, items: RecordItem[] }[]
+      if (sortedRecordList.length === 0) return [];
+
       const result: Result = [{
         title: dayjs(sortedRecordList[0].createdAt).format('YYYY-MM-DD'),
         items: [sortedRecordList[0]]
