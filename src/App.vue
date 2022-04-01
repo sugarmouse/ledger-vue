@@ -5,6 +5,10 @@
 </template>
 
 <style lang="scss">
+#app{
+  max-width: 500px;
+  margin: 0 auto;
+}
 @import "~@/assets/style/helper.scss";
 @import "~@/assets/style/reset.scss";
 body{
