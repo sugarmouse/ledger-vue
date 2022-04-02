@@ -2,7 +2,9 @@
   <div>
     <Layout>
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
-      <Chart :options="x"/>
+      <div class="chart-wrapper" ref="chartWrapper">
+        <Chart class="chart" :options="x"/>
+      </div>
       <ol v-if="groupedList.length>0">
         <li v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
@@ -45,22 +47,37 @@
       return;
     }
 
+    mounted() {
+      const $div = this.$refs.chartWrapper as HTMLDivElement;
+      $div.scrollLeft = $div.scrollWidth;
+    }
+
     get x() {
       return {
+        grid: {
+          left: 0,
+          right: 0,
+        },
         xAxis: {
           type: 'category',
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
             'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
             'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
             'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          axisTick: {alignWithLabel: true},
+          axisLine: {lineStyle: {color: '#666'}}
         },
         yAxis: {
-          type: 'value'
+          type: 'value',
+          show: false
         },
         series: [
           {
+            symbolSize: 10,
+            itemStyle: {borderWidth: 1, color: '#666'},
             data: [150, 230, 224, 218, 135, 147, 260,
+              150, 230, 224, 218, 135, 147, 260,
               150, 230, 224, 218, 135, 147, 260,
               150, 230, 224, 218, 135, 147, 260,
               150, 230, 224, 218, 135, 147, 260
@@ -69,7 +86,11 @@
             type: 'line'
           }
         ],
-        tooltip: {show: true},
+        tooltip: {
+          show: true,
+          triggerOn: 'click',
+          formatter: '{c}'
+        },
       };
     }
 
@@ -125,6 +146,18 @@
 </script>
 
 <style lang="scss" scoped>
+.chart {
+  width: 430%;
+
+  &-wrapper {
+    overflow: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+}
+
 .noResult {
   padding: 16px;
   text-align: center;
