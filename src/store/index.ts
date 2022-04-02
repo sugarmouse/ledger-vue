@@ -29,7 +29,7 @@ const store = new Vuex.Store({
     },
     createRecord(state, record: RecordItem) {
       const x = clone(record);
-      x.createdAt = new Date().toISOString();
+      x.createdAt = x.createdAt || new Date().toISOString();
       state.recordList.push(x);
       store.commit('saveRecords');
     },
@@ -55,13 +55,13 @@ const store = new Vuex.Store({
         }
       }
       state.tagList.splice(index, 1);
-      store.commit('saveTags')
+      store.commit('saveTags');
     },
 
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList));
     },
-    updateTag(state, payload:{id: string, name: string}) {
+    updateTag(state, payload: { id: string, name: string }) {
       const idList = state.tagList.map(item => item.id);
       if (idList.indexOf(payload.id) >= 0) {
         const nameList = state.tagList.map(item => item.name);

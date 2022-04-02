@@ -3,6 +3,13 @@
     <NumberPad
         @update-output="onUpdateOutput"
         @submit="saveRecord"/>
+    <div class="createdAt">
+      <FormItem
+          type="date"
+          :value.sync="record.createdAt"
+          field-name="日期"
+          placeholder="在这里输入日期"/>
+    </div>
     <div class="notes">
       <FormItem
           :value.sync="record.notes"
@@ -35,7 +42,8 @@
       tags: [],
       notes: '',
       type: '-',
-      amount: 0
+      amount: 0,
+      createdAt: new Date().toISOString()
     };
     typeData = typeList;
 
@@ -53,14 +61,14 @@
 
 
     saveRecord() {
-      if(!this.record.tags||this.record.tags.length===0){
-        window.alert('请至少选择一个标签')
+      if (!this.record.tags || this.record.tags.length === 0) {
+        window.alert('请至少选择一个标签');
         return;
       }
       store.commit('createRecord', this.record);
-      window.alert('保存成功')
-      this.record.notes = ''
-      this.record.tags = []
+      window.alert('保存成功');
+      this.record.notes = '';
+      this.record.tags = [];
     }
   }
 </script>
