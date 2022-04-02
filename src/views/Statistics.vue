@@ -2,8 +2,9 @@
   <div>
     <Layout>
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
+      <Chart :options="x"/>
       <ol v-if="groupedList.length>0">
-        <li  v-for="(groupedRecords,index) in groupedList" :key="index">
+        <li v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
           <ol>
             <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
@@ -28,11 +29,12 @@
   import store from '@/store';
   import dayjs from 'dayjs';
   import clone from '@/lib/clone';
+  import Chart from '@/components/Chart.vue';
 
   const oneDay = 86400 * 1000;
   type Result = { title: string, total?: number, items: RecordItem[] }[]
   @Component({
-    components: {Tabs}
+    components: {Tabs, Chart}
   })
   export default class Statistics extends Vue {
     selectedType = '-';
@@ -41,6 +43,34 @@
     created(): void {
       store.commit('fetchRecords');
       return;
+    }
+
+    get x() {
+      return {
+        xAxis: {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
+            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [150, 230, 224, 218, 135, 147, 260,
+              150, 230, 224, 218, 135, 147, 260,
+              150, 230, 224, 218, 135, 147, 260,
+              150, 230, 224, 218, 135, 147, 260
+
+            ],
+            type: 'line'
+          }
+        ],
+        tooltip: {show: true},
+      };
     }
 
     get recordList(): RecordItem[] {
@@ -95,10 +125,11 @@
 </script>
 
 <style lang="scss" scoped>
-.noResult{
+.noResult {
   padding: 16px;
   text-align: center;
 }
+
 ::v-deep .types-tabs-item {
   background: #c4c4c4;
 
