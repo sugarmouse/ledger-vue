@@ -4,17 +4,23 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component, Prop} from 'vue-property-decorator';
-  import echarts,{EChartOption} from 'echarts';
+  import {Component, Prop, Watch} from 'vue-property-decorator';
+  import echarts, {EChartOption, ECharts} from 'echarts';
 
   @Component
   export default class Chart extends Vue {
+    myChart?: ECharts;
     @Prop() options?: EChartOption;
+
+    @Watch('options')
+    onOptionsChange(newValue: EChartOption) {
+      this.options && this.myChart!.setOption(newValue);
+    }
 
     mounted() {
       const chartDom = document.querySelector('.lineChart') as HTMLDivElement;
-      const myChart = echarts.init(chartDom);
-      this.options && myChart.setOption(this.options);
+      this.myChart = echarts.init(chartDom);
+      this.options && this.myChart.setOption(this.options);
     }
   }
 </script>

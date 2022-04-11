@@ -3,7 +3,7 @@
     <Layout>
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
       <div class="chart-wrapper" ref="chartWrapper">
-        <Chart class="chart" :options="x"/>
+        <Chart class="chart" :options="chartOptions"/>
       </div>
       <ol v-if="groupedList.length>0">
         <li v-for="(groupedRecords,index) in groupedList" :key="index">
@@ -24,14 +24,16 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
+  import _ from 'lodash';
+  import dayjs from 'dayjs';
+  import clone from '@/lib/clone';
   import {Component} from 'vue-property-decorator';
+  import Vue from 'vue';
   import Tabs from '@/components/tabs.vue';
   import typeList from '@/constants/typeList';
   import store from '@/store';
-  import dayjs from 'dayjs';
-  import clone from '@/lib/clone';
   import Chart from '@/components/Chart.vue';
+
 
   const oneDay = 86400 * 1000;
   type Result = { title: string, total?: number, items: RecordItem[] }[]
@@ -52,7 +54,18 @@
       $div.scrollLeft = $div.scrollWidth;
     }
 
-    get x() {
+    get chartOptions() {
+      const today = new Date();
+      const keyValueList = [];
+      for (let i = 0; i <= 29; i++) {
+        const date = dayjs(today).subtract(i, 'day').format('YYYY-MM-DD');
+        const found = _.find(this.groupedList, {title: date});
+        const amount = found ? found.total : 0;
+        keyValueList.push({key: date, value: amount});
+      }
+      const dateList = keyValueList.map(item => item.key).reverse();
+      const amountList = keyValueList.map(item => item.value).reverse();
+
       return {
         grid: {
           left: 0,
@@ -60,13 +73,15 @@
         },
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',
-            'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: dateList,
           axisTick: {alignWithLabel: true},
-          axisLine: {lineStyle: {color: '#666'}}
+          axisLine: {lineStyle: {color: '#666'}},
+          axisLabel: {
+            formatter: function (value: string) {
+              return value.substring(5);
+            }
+
+          }
         },
         yAxis: {
           type: 'value',
@@ -76,13 +91,7 @@
           {
             symbolSize: 10,
             itemStyle: {borderWidth: 1, color: '#666'},
-            data: [150, 230, 224, 218, 135, 147, 260,
-              150, 230, 224, 218, 135, 147, 260,
-              150, 230, 224, 218, 135, 147, 260,
-              150, 230, 224, 218, 135, 147, 260,
-              150, 230, 224, 218, 135, 147, 260
-
-            ],
+            data: amountList,
             type: 'line'
           }
         ],
