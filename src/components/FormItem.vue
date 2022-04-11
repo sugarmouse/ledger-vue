@@ -33,7 +33,6 @@
     @Prop() type?: string;
 
     onValueChange(value: string) {
-      console.log(value);
       this.$emit('update:value', value);
     }
 
