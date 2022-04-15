@@ -26,7 +26,6 @@
 <script lang="ts">
   import _ from 'lodash';
   import dayjs from 'dayjs';
-  import clone from '@/lib/clone';
   import {Component} from 'vue-property-decorator';
   import Vue from 'vue';
   import Tabs from '@/components/tabs.vue';
@@ -109,7 +108,7 @@
 
     get groupedList(): Result {
 
-      const recordList = clone(this.recordList);
+      const recordList = _.cloneDeep(this.recordList);
       if (recordList.length === 0) return [];
 
       const sortedRecordList = recordList

@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import clone from '@/lib/clone';
+import _ from 'lodash';
 import createId from '@/lib/idCreator';
 
 Vue.use(Vuex);
@@ -28,7 +28,7 @@ const store = new Vuex.Store({
       state.currentTag = state.tagList.filter(tag => tag.id === id)[0];
     },
     createRecord(state, record: RecordItem) {
-      const x = clone(record);
+      const x = _.cloneDeep(record);
       x.createdAt = x.createdAt || new Date().toISOString();
       state.recordList.push(x);
       store.commit('saveRecords');
