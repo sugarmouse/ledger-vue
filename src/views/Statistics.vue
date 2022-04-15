@@ -9,7 +9,7 @@
         <li v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
           <ol>
-            <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
+            <li v-for="record in groupedRecords.items" :key="record.createdAt+record.amount+record.tags.toString()" class="record">
               <span v-if="record.tags.length === 0">无</span>
               <span v-else v-for="tag in record.tags" :key="tag.id">{{ tag.name }}</span>
               <span class="notes">{{ record.notes }}</span>
