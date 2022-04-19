@@ -58,10 +58,6 @@ nav {
     .icon {
       color: $lighter-font;
     }
-
-    .font {
-
-    }
   }
 }
 </style>
