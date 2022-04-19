@@ -104,15 +104,19 @@
   .output {
     @extend %clearFix;
 
+    color: $lighter-font;
     font-size: 36px;
     font-family: Consolas, monospace;
-    padding: 9px 16px;
+    margin:9px 6px;
     text-align: right;
     height: 72px;
+    line-height: 72px;
+    background-color: #777777;
   }
 
   .buttons {
     @extend %clearFix;
+    background: #141414;
 
     > .button-wrapper {
       width: 25%;

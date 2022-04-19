@@ -1,26 +1,31 @@
 <template>
   <Layout class-prefix="layout">
+
     <NumberPad
         @update-output="onUpdateOutput"
         @submit="saveRecord"/>
+
     <div class="createdAt">
       <FormItem
           type="date"
           :value.sync="record.createdAt"
           field-name="日期"
-          placeholder="在这里输入日期"/>
+      />
     </div>
+
     <div class="notes">
       <FormItem
           :value.sync="record.notes"
           field-name="备注"
           placeholder="在这里输入备注"/>
     </div>
+
+    <Tags @update-tags="record.tags = $event"
+          :value="record.tags"/>
+
     <Tabs :data-source="typeData"
           class-prefix="types"
           :value.sync="record.type"/>
-    <Tags @update-tags="record.tags = $event"
-          :value="record.tags"/>
   </Layout>
 </template>
 
