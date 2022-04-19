@@ -2,15 +2,21 @@
   <nav>
     <router-link to="/money" class="item" active-class="selected">
       <Icon name="money"/>
-      记账
+      <div class="font">
+        记账
+      </div>
     </router-link>
     <router-link to="/tags" class="item" active-class="selected">
       <Icon name="tag"/>
-      标签
+      <div class="font">
+        标签
+      </div>
     </router-link>
     <router-link to="/statistics" class="item" active-class="selected">
       <Icon name="details"/>
-      统计
+      <div class="font">
+        统计
+      </div>
     </router-link>
   </nav>
 </template>
@@ -23,11 +29,12 @@
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
+
 nav {
   display: flex;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
   flex-direction: row;
   font-size: 12px;
+
   > .item {
     padding: 2px 0;
     width: 33.33333%;
@@ -35,13 +42,26 @@ nav {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
     .icon {
+      color: $darker-font;
       width: 32px;
       height: 32px;
     }
+
+    .font {
+      color: $basic-font;
+    }
   }
-  > .item.selected{
-    color: $color-highlight;
+
+  > .item.selected {
+    .icon {
+      color: $lighter-font;
+    }
+
+    .font {
+
+    }
   }
 }
 </style>
