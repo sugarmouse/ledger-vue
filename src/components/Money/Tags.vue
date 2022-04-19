@@ -49,7 +49,7 @@
 
 
 .tags {
-  background: #fff;
+  background: #000;
   font-size: 14px;
   padding: 16px;
   flex-grow: 1;

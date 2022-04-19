@@ -29,28 +29,37 @@
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
 .tabs {
-  background: #c4c4c4;
+  background: $background;
   display: flex;
+  justify-content: space-around;
+  padding: 6px;
   text-align: center;
   font-size: 24px;
-
+  :first-child{
+    background-color: #CF4321;
+  }
+  :last-child{
+    background-color: #223160;
+  }
   > li {
-    width: 50%;
+    width: 40%;
     height: 64px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    border-radius: 8px;
 
     &.selected::after {
       content: '';
       position: absolute;
-      bottom: 0;
+      bottom: -4px;
       left: 0;
       width: 100%;
-      height: 4px;
-      background: #333;
+      height: 2px;
+      background: #d9d9d9;
     }
   }
 }
