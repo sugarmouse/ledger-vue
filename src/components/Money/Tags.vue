@@ -1,5 +1,7 @@
 <template>
+
   <div class="tags">
+    <TagItem name="003"/>
     <ul class="current">
       <li v-for="tag in tagList" :key="tag.id"
           :class="{selected: selectedTags.indexOf(tag)>=0}"
@@ -17,8 +19,10 @@
   import store from '@/store';
   import {mixins} from 'vue-class-component';
   import {TagHelper} from '@/mixins/TagHelper';
-
-  @Component
+  import TagItem from '@/components/TagItem.vue';
+  @Component({
+    components: {TagItem}
+  })
   export default class Tags extends mixins(TagHelper) {
     selectedTags: string[] = [];
 
