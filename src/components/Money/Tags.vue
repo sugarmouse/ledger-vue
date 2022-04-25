@@ -1,48 +1,101 @@
 <template>
+  <div>
+    <div class="tags-wrapper">
+      <div>
+        <span>选中的标签：</span>
+        <TagItem :tag="selectedTagName"/>
+      </div>
+      <div>
+        <div class="outgoTags" v-if="type==='-'">
+          <ul class="tags" @click="selectTag">
+            <li v-for="tag in outgoTagList"
+                :value="tag.name"
+                :key="tag.name">
+              <TagItem :tag="tag"/>
+            </li>
+          </ul>
+        </div>
+        <div v-else class="incomeTags tags" >
+          <ul class="tags" @click="selectTag">
+            <li v-for="tag in incomeTagList"
+                :value="tag.name"
+                :key="tag.name">
+              <TagItem :tag="tag"/>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-  <div class="tags">
-    <TagItem name="003"/>
-    <ul class="current">
-      <li v-for="tag in tagList" :key="tag.id"
-          :class="{selected: selectedTags.indexOf(tag)>=0}"
-          @click="toggle(tag)">{{ tag.name }}
-      </li>
-    </ul>
-    <div class="new">
-      <button @click="addTag">新增标签</button>
+
+<!--      <ul class="tags" @click="selectTag">-->
+<!--        <li v-if="tag.type===type" v-for="tag in tagList"-->
+<!--            :value="tag.name"-->
+<!--            :key="tag.name">-->
+<!--          <TagItem :tag="tag"/>-->
+<!--        </li>-->
+<!--      </ul>-->
     </div>
   </div>
+
 </template>
 
 <script lang="ts">
-  import {Component} from 'vue-property-decorator';
-  import store from '@/store';
+  import {Component, Prop} from 'vue-property-decorator';
+  import store from '@/store/index';
   import {mixins} from 'vue-class-component';
   import {TagHelper} from '@/mixins/TagHelper';
   import TagItem from '@/components/TagItem.vue';
+  import _ from 'lodash';
+
   @Component({
     components: {TagItem}
   })
   export default class Tags extends mixins(TagHelper) {
-    selectedTags: string[] = [];
+    @Prop() type!: '-' | '+';
+    selectedTagName: Tag = {name: 'none', text: '待选'};
 
-    get tagList() {
+    get tagList(): Tag[] {
       return store.state.tagList;
     }
 
-    created() {
-      store.commit('fetchTags');
+    get incomeTagList(): Tag[] {
+      return this.findTypedTagList('+');
+    }
+
+    get outgoTagList(): Tag[] {
+      return this.findTypedTagList('-');
     }
 
 
-    toggle(tag: string) {
-      const index = this.selectedTags.indexOf(tag);
-      if (index >= 0) {
-        this.selectedTags.splice(index, 1);
-      } else {
-        this.selectedTags.push(tag);
+    created(): void {
+      store.commit('fetchTags');
+    }
+
+    selectTag(event: PointerEvent) {
+      const target = event.target;
+      if (target instanceof Element) {
+        const li = target.closest('li');
+        if (li) {
+          const name = li.getAttribute('value');
+          if (name) {
+            const selectedTag = this.findTag(name, this.tagList);
+            if (selectedTag) this.selectedTagName = selectedTag;
+          }
+        }
       }
-      this.$emit('update-tags', this.selectedTags);
+    }
+
+    findTag(tagName: string, tagList: Tag[]) {
+      for (let i = 0; i <= tagList.length; i++) {
+        if (tagList[i].name === tagName) {
+          return (_.cloneDeep(tagList[i]));
+        }
+      }
+    }
+
+    findTypedTagList(type: '-' | '+') {
+      // _.filter(this.tagList,)
+      return this.tagList.filter(tag => tag.type === type);
     }
   }
 </script>
@@ -51,49 +104,20 @@
 @use "sass:math";
 @import "~@/assets/style/helper.scss";
 
-
-.tags {
+.tags-wrapper {
   background: #000;
-  font-size: 14px;
-  padding: 16px;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
 
-  > .current {
+  .tags {
+    font-size: 14px;
+    padding: 16px;
+    flex-grow: 1;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    flex-flow: wrap;
+    justify-content: space-evenly;
 
-    > li {
-      $bg: #d9d9d9;
-      background: $bg;
-      $h: 24px;
-      height: $h;
-      line-height: $h;
-      border-radius: math.div($h, 2);
-      padding: 0 16px;
-      margin-right: 12px;
-      margin-top: 4px;
-
-      &.selected {
-        background: darken($bg, 50%);
-        color: #fff;
-      }
-    }
-  }
-
-  > .new {
-    padding-top: 16px;
-
-    button {
-      background: transparent;
-      border: none;
-      color: #999;
-      border-bottom: 1px solid;
-      padding: 0 4px;
-    }
   }
 }
+
 
 </style>

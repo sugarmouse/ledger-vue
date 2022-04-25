@@ -21,7 +21,7 @@
     </div>
 
     <Tags @update-tags="record.tags = $event"
-          :value="record.tags"/>
+          :value="record.tags" :type="record.type"/>
 
     <Tabs :data-source="typeData"
           class-prefix="types"

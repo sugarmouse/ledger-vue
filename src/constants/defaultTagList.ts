@@ -1,0 +1,33 @@
+const defaultTagList: Tag[] = [
+    {name: 'food', text: '餐饮', type: '-'},
+    {name: 'entertainment', text: '娱乐', type: '-'},
+    {name: 'daily-necessities', text: '日用', type: '-'},
+    {name: 'communication', text: '通讯', type: '-'},
+    {name: 'fruit', text: '果蔬', type: '-'},
+    {name: 'traffic', text: '交通', type: '-'},
+    {name: 'drink', text: '烟酒', type: '-'},
+    {name: 'digit', text: '数码', type: '-'},
+    {name: 'cloth', text: '服饰', type: '-'},
+    {name: 'pet', text: '宠物', type: '-'},
+    {name: 'travel', text: '旅行', type: '-'},
+    {name: 'facial-care', text: '美容', type: '-'},
+    {name: 'social', text: '社交', type: '-'},
+    {name: 'car', text: '汽车', type: '-'},
+    {name: 'house', text: '住房', type: '-'},
+    {name: 'book', text: '书籍', type: '-'},
+    {name: 'elders', text: '长辈', type: '-'},
+    {name: 'lottery', text: '彩票', type: '-'},
+    {name: 'study', text: '学习', type: '-'},
+    {name: 'office', text: '办公', type: '-'},
+    {name: 'gift', text: '礼物', type: '-'},
+    {name: 'sport', text: '运动', type: '-'},
+    {name: 'snack', text: '零食', type: '-'},
+    {name: 'repair', text: '维修', type: '-'},
+    {name: 'salary', text: '工资', type: '+'},
+    {name: 'part-time-job', text: '兼职', type: '+'},
+    {name: 'money-management', text: '理财', type: '+'},
+    {name: 'cash-gift', text: '礼金', type: '+'},
+    {name: 'other', text: '其他', type: '+'}
+  ]
+;
+export default defaultTagList;

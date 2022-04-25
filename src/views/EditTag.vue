@@ -44,18 +44,18 @@
       }
     }
 
-    updateTag(name: string) {
-      if (this.currentTag) {
-        store.commit('updateTag', {id: this.currentTag.id, name});
-      }
-    }
-
-    remove() {
-      if (this.currentTag) {
-        store.commit('removeTag', this.currentTag.id);
-        this.$router.replace('/tags');
-      }
-    }
+    // updateTag(name: string) {
+    //   if (this.currentTag) {
+    //     store.commit('updateTag', {name: this.currentTag.name, text});
+    //   }
+    // }
+    //
+    // remove() {
+    //   if (this.currentTag) {
+    //     store.commit('removeTag', this.currentTag.id);
+    //     this.$router.replace('/tags');
+    //   }
+    // }
 
     goBack() {
       this.$router.replace('/tags');
