@@ -1,39 +1,48 @@
 <template>
   <div>
     <div class="tags-wrapper">
-      <div>
-        <span>选中的标签：</span>
+      <div class="selected-tag">
+        <span class="describe">选中的标签：</span>
         <TagItem :tag="selectedTagName"/>
       </div>
-      <div>
+      <div class="all-tags">
         <div class="outgoTags" v-if="type==='-'">
           <ul class="tags" @click="selectTag">
-            <li v-for="tag in outgoTagList"
+            <li class="tag" v-for="tag in outgoTagList"
                 :value="tag.name"
                 :key="tag.name">
               <TagItem :tag="tag"/>
             </li>
+            <li class="tag more">
+              <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
+            </li>
+            <li class="hidden"></li>
+            <li class="hidden"></li>
+            <li class="hidden"></li>
+            <li class="hidden"></li>
+            <li class="hidden"></li>
           </ul>
         </div>
-        <div v-else class="incomeTags tags" >
+        <div v-else class="incomeTags">
           <ul class="tags" @click="selectTag">
-            <li v-for="tag in incomeTagList"
+            <li class="tag" v-for="tag in incomeTagList"
                 :value="tag.name"
                 :key="tag.name">
               <TagItem :tag="tag"/>
             </li>
+            <li class="tag more">
+              <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
+            </li>
+            <li class="hidden"></li>
+            <li class="hidden"></li>
+            <li class="hidden"></li>
+            <li class="hidden"></li>
+            <li class="hidden"></li>
+
+
           </ul>
         </div>
       </div>
-
-
-<!--      <ul class="tags" @click="selectTag">-->
-<!--        <li v-if="tag.type===type" v-for="tag in tagList"-->
-<!--            :value="tag.name"-->
-<!--            :key="tag.name">-->
-<!--          <TagItem :tag="tag"/>-->
-<!--        </li>-->
-<!--      </ul>-->
     </div>
   </div>
 
@@ -52,18 +61,18 @@
   })
   export default class Tags extends mixins(TagHelper) {
     @Prop() type!: '-' | '+';
-    selectedTagName: Tag = {name: 'none', text: '待选'};
+    selectedTagName: Tag = {name: 'toBeSelected', text: '待选'};
 
     get tagList(): Tag[] {
       return store.state.tagList;
     }
 
     get incomeTagList(): Tag[] {
-      return this.findTypedTagList('+');
+      return this.findTypedTagList('+').slice(0, 8);
     }
 
     get outgoTagList(): Tag[] {
-      return this.findTypedTagList('-');
+      return this.findTypedTagList('-').slice(0, 9);
     }
 
 
@@ -105,18 +114,55 @@
 @import "~@/assets/style/helper.scss";
 
 .tags-wrapper {
-  background: #000;
+  display: flex;
+  flex-direction: column;
 
-  .tags {
-    font-size: 14px;
-    padding: 16px;
-    flex-grow: 1;
+  .selected-tag {
+    margin: 10px 20px 0 20px;
+    padding: 8px;
+    border-radius: 10px;
     display: flex;
-    flex-direction: row;
-    flex-flow: wrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    align-items: center;
+    background: lighten($background,30%);
+
+
+    .describe {
+      font-size: 24px;
+
+    }
+  }
+
+  .all-tags {
+    .incomeTags, .outgoTags {
+      .tags {
+        font-size: 14px;
+        padding: 16px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .tag {
+          margin: 4px;
+
+          .more-tagItem-wrapper {
+            color: $lighter-font;
+            background: lighten($background, 30%);
+          }
+        }
+
+        .hidden {
+          width: 60px;
+          margin: 4px;
+          height: 0;
+        }
+      }
+    }
 
   }
+
+
 }
 
 

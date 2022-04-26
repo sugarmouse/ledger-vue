@@ -20,14 +20,13 @@
 <script lang="ts">
   import Vue from 'vue';
   import Icon from '@/components/Icon.vue';
-  import Layout from '@/components/layout.vue';
   import {Component} from 'vue-property-decorator';
   import FormItem from '@/components/FormItem.vue';
   import Button from '@/components/Button.vue';
   import store from '@/store';
 
   @Component({
-    components: {Button, FormItem, Icon, Layout},
+    components: {Button, FormItem, Icon},
   })
   export default class EditTag extends Vue {
     get currentTag() {

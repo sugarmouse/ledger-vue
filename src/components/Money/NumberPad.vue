@@ -109,8 +109,8 @@
     font-family: Consolas, monospace;
     margin:9px 6px;
     text-align: right;
-    height: 72px;
-    line-height: 72px;
+    height: 60px;
+    line-height: 60px;
     background-color: #777777;
   }
 

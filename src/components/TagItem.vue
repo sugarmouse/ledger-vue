@@ -1,7 +1,7 @@
 <template>
-  <div class="tagItem-wrapper">
+  <div class="tagItem-wrapper" :class=" classPrefix && `${classPrefix}-tagItem-wrapper`">
     <Icon :name="tag.name"/>
-    <div class="tagName">{{ tag.text }}</div>
+    <div class="tagName" >{{ tag.text }}</div>
   </div>
 </template>
 
@@ -11,7 +11,8 @@
 
   @Component
   export default class TagItem extends Vue {
-    @Prop() tag?: { name: string, text: string };
+    @Prop({required:true}) tag!: { name: string, text: string };
+    @Prop() classPrefix?:string
 
   }
 </script>

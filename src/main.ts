@@ -4,7 +4,7 @@ import './registerServiceWorker';
 import router from './router';
 import store from './store/index';
 import Nav from '@/components/nav.vue';
-import Layout from '@/components/layout.vue';
+import Layout from '@/components/Layout.vue';
 import Icon from '@/components/Icon.vue';
 
 

@@ -1,16 +1,16 @@
 <template>
-  <Layout class-prefix="layout">
-
-    <NumberPad
-        @update-output="onUpdateOutput"
-        @submit="saveRecord"/>
+  <Layout class-prefix="money">
+    <div class="numberPad">
+      <NumberPad
+          @update-output="onUpdateOutput"
+          @submit="saveRecord"/>
+    </div>
 
     <div class="createdAt">
       <FormItem
           type="date"
           :value.sync="record.createdAt"
-          field-name="日期"
-      />
+          field-name="日期"/>
     </div>
 
     <div class="notes">
@@ -20,12 +20,17 @@
           placeholder="在这里输入备注"/>
     </div>
 
-    <Tags @update-tags="record.tags = $event"
-          :value="record.tags" :type="record.type"/>
+    <div class="tags">
+      <Tags @update-tags="record.tags = $event"
+            :value="record.tags" :type="record.type"/>
+    </div>
 
-    <Tabs :data-source="typeData"
-          class-prefix="types"
-          :value.sync="record.type"/>
+    <div class="tabs">
+      <Tabs :data-source="typeData"
+            class-prefix="types"
+            :value.sync="record.type"/>
+    </div>
+
   </Layout>
 </template>
 
@@ -79,12 +84,22 @@
 </script>
 
 <style lang="scss">
-.layout-content {
+.money-content {
   display: flex;
   flex-direction: column-reverse;
+
+  .tags{
+    flex-grow: 1;
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .notes {
+    padding: 12px 0;
+  }
 }
 
-.notes {
-  padding: 12px 0;
-}
+
 </style>
