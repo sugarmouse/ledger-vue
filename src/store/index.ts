@@ -32,7 +32,6 @@ const store = new Vuex.Store({
       window.localStorage.setItem('recordList', JSON.stringify(state.recordList));
     },
     fetchTags(state) {
-
       let localTagList = window.localStorage.getItem('tagList');
       if (localTagList === null) {
         window.localStorage.setItem('tagList', JSON.stringify(defaultTagList));
@@ -42,10 +41,7 @@ const store = new Vuex.Store({
     },
     setCurrentTag(state, name) {
       state.currentTag = state.tagList.filter(tag => tag.name === name)[0];
-    },
-    saveTagList(state) {
-      window.localStorage.setItem('incomeTagList', JSON.stringify(state.tagList));
-    },
+    }
 
     // createTag(state, name: string) {
     //   const tagsName = state.tagList.map(item => item.name);

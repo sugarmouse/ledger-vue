@@ -5,6 +5,8 @@ import Tags from '@/views/Tags.vue';
 import Statistics from '@/views/Statistics.vue';
 import NotFound from '@/views/NotFound.vue';
 import EditTag from '@/views/EditTag.vue';
+import IncomeTagList from '@/views/IncomeTagList.vue';
+import OutgoTagList from '@/views/OutgoTagList.vue';
 
 Vue.use(VueRouter);
 
@@ -25,6 +27,14 @@ const routes: Array<RouteConfig> = [
   {
     path: '/statistics',
     component: Statistics
+  },
+  {
+    path:'/incomeTagList',
+    component:IncomeTagList
+  },
+  {
+    path:'/outgoTagList',
+    component:OutgoTagList
   },
   {
     path: '/labels/edit/:id',

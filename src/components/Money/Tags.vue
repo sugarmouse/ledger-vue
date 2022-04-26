@@ -14,7 +14,9 @@
               <TagItem :tag="tag"/>
             </li>
             <li class="tag more">
-              <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
+              <router-link to="/outgoTagList">
+                <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
+              </router-link>
             </li>
             <li class="hidden"></li>
             <li class="hidden"></li>
@@ -31,14 +33,15 @@
               <TagItem :tag="tag"/>
             </li>
             <li class="tag more">
-              <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
+              <router-link to="/incomeTagList">
+                <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
+              </router-link>
             </li>
             <li class="hidden"></li>
             <li class="hidden"></li>
             <li class="hidden"></li>
             <li class="hidden"></li>
             <li class="hidden"></li>
-
 
           </ul>
         </div>
@@ -124,7 +127,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: lighten($background,30%);
+    background: lighten($background, 30%);
 
 
     .describe {

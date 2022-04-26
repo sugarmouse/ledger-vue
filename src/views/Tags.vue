@@ -31,11 +31,11 @@
   })
   export default class Tags extends mixins(TagHelper) {
 
-    get tags() {
+    get tags():Tag[] {
       return store.state.tagList;
     }
 
-    created() {
+    created():void {
       store.commit('fetchTags');
     }
   }
