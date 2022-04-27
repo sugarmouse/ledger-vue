@@ -1,12 +1,14 @@
-import store from '@/store';
 import Vue from 'vue';
 import {Component} from 'vue-property-decorator';
+import _ from 'lodash';
 
 @Component
-export class TagHelper extends Vue{
-  addTag() {
-    const name = window.prompt('请输入标签名');
-    if (!name) {window.alert('标签名不能为空');}
-    store.commit('createTag', name);
+export class TagHelper extends Vue {
+  findTag(tagName: string, tagList: Tag[]) {
+    for (let i = 0; i <= tagList.length; i++) {
+      if (tagList[i].name === tagName) {
+        return (_.cloneDeep(tagList[i]));
+      }
+    }
   }
 }

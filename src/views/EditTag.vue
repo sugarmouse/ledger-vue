@@ -30,7 +30,7 @@
   })
   export default class EditTag extends Vue {
     get currentTag() {
-      return store.state.currentTag;
+      return store.state.selectedTag;
     }
 
     created() {

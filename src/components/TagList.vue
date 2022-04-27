@@ -6,7 +6,7 @@
       <span class="rightIcon"></span>
     </div>
     <div class="tagList-wrapper">
-      <ul class="tagList">
+      <ul class="tagList" @click="onTagClick">
         <li class="tag" v-for="tag in outgoTagList" :key="tag.name" :value="tag.name">
           <Icon :name="tag.name"></Icon>
           <span class="text">{{ tag.text }}</span>
@@ -17,30 +17,53 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
   import {Component, Prop} from 'vue-property-decorator';
   import store from '@/store';
   import TagItem from '@/components/TagItem.vue';
+  import {mixins} from 'vue-class-component';
+  import {TagHelper} from '@/mixins/TagHelper';
 
   @Component({
     components: {TagItem}
   })
-  export default class OutgoTagList extends Vue {
+  export default class OutgoTagList extends mixins(TagHelper) {
     @Prop({required: true}) barName!: string;
     @Prop({required: true}) type!: '-' | '+';
-    tagList:Tag[]=[]
 
 
-    created():void {
-      store.commit('fetchTags')
-      this.tagList = store.state.tagList
+    created(): void {
+      store.commit('fetchTags');
+    }
+
+    get tagList() {
+      return store.state.tagList;
     }
 
     get outgoTagList() {
       return this.tagList.filter(tag => tag.type === this.type);
     }
 
-    goBack():void {
+    onTagClick(event: PointerEvent) {
+      const target = event.target;
+      if (target instanceof Element) {
+        const li = target.closest('li');
+        if (li) {
+          const name = li.getAttribute('value');
+          if (name) {
+            const selectedTag = this.findTag(name, this.tagList);
+            if (selectedTag) {
+              store.commit('setSelectedTag', selectedTag.name);
+              this.goBack();
+            } else {
+              window.alert('出错了');
+            }
+          }
+        }
+      }
+    }
+
+
+    goBack(): void {
       this.$router.replace('/money');
     }
   }
@@ -89,7 +112,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 8px;
-      background-color: lighten($background,20%);
+      background-color: lighten($background, 20%);
       margin: 6px 0;
       border-radius: 8px;
       border-bottom: 1px solid rgba(27, 26, 28, 0.99);

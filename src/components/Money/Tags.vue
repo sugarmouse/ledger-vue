@@ -57,7 +57,6 @@
   import {mixins} from 'vue-class-component';
   import {TagHelper} from '@/mixins/TagHelper';
   import TagItem from '@/components/TagItem.vue';
-  import _ from 'lodash';
 
   @Component({
     components: {TagItem}
@@ -104,13 +103,6 @@
       }
     }
 
-    findTag(tagName: string, tagList: Tag[]) {
-      for (let i = 0; i <= tagList.length; i++) {
-        if (tagList[i].name === tagName) {
-          return (_.cloneDeep(tagList[i]));
-        }
-      }
-    }
 
     findTypedTagList(type: '-' | '+') {
       return this.tagList.filter(tag => tag.type === type);
