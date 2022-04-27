@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import VueRouter, {RouteConfig} from 'vue-router';
 import Money from '@/views/Money.vue';
-import Tags from '@/views/Tags.vue';
-import Statistics from '@/views/Statistics.vue';
+import Detail from '@/views/Detail.vue';
 import NotFound from '@/views/NotFound.vue';
 import EditTag from '@/views/EditTag.vue';
 import IncomeTagList from '@/views/IncomeTagList.vue';
 import OutgoTagList from '@/views/OutgoTagList.vue';
+import Statistics from '@/views/Statistics.vue';
 
 Vue.use(VueRouter);
 
@@ -21,8 +21,8 @@ const routes: Array<RouteConfig> = [
     component: Money
   },
   {
-    path: '/tags',
-    component: Tags
+    path: '/detail',
+    component: Detail
   },
   {
     path: '/statistics',

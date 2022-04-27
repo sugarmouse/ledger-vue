@@ -6,10 +6,10 @@
         记账
       </div>
     </router-link>
-    <router-link to="/tags" class="item" active-class="selected">
-      <Icon name="tag"/>
+    <router-link to="/detail" class="item" active-class="selected">
+      <Icon name="detail"/>
       <div class="font">
-        标签
+        明细
       </div>
     </router-link>
     <router-link to="/statistics" class="item" active-class="selected">
