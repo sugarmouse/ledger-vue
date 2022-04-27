@@ -9,9 +9,8 @@
         <li v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
           <ol>
-            <li v-for="record in groupedRecords.items" :key="record.createdAt+record.amount+record.tags.toString()" class="record">
-              <span v-if="record.tags.length === 0">无</span>
-              <span v-else v-for="tag in record.tags" :key="tag.id">{{ tag.name }}</span>
+            <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
+              <TagItem :tag="{name:record.tag.name, text:record.tag.text}"/>
               <span class="notes">{{ record.notes }}</span>
               <span>￥{{ record.amount }}</span>
             </li>
@@ -32,12 +31,13 @@
   import typeList from '@/constants/typeList';
   import store from '@/store';
   import Chart from '@/components/Chart.vue';
+  import TagItem from '@/components/TagItem.vue';
 
 
   const oneDay = 86400 * 1000;
   type Result = { title: string, total?: number, items: RecordItem[] }[]
   @Component({
-    components: {Tabs, Chart}
+    components: {TagItem, Tabs, Chart}
   })
   export default class Detail extends Vue {
     selectedType = '-';

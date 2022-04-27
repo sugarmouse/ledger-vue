@@ -115,7 +115,6 @@
       background-color: lighten($background, 20%);
       margin: 6px 0;
       border-radius: 8px;
-      border-bottom: 1px solid rgba(27, 26, 28, 0.99);
 
       svg {
         $length: 40px;

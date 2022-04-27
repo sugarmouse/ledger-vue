@@ -8,15 +8,20 @@ Vue.use(Vuex);
 type RootState = {
   recordList: RecordItem[],
   tagList: Tag[],
-  selectedTag?: Tag
+  selectedTag: Tag
 }
 
 const store = new Vuex.Store({
   state: {
     recordList: [],
     tagList: [],
-    selectedTag: undefined
+    selectedTag: {name: 'toBeSelected', text: '待选'}
   } as RootState,
+  getters: {
+    getSelectedTag: state => {
+      return state.selectedTag;
+    }
+  },
 
   mutations: {
     fetchRecords(state) {
@@ -36,12 +41,12 @@ const store = new Vuex.Store({
       let localTagList = window.localStorage.getItem('tagList');
       if (localTagList === null) {
         window.localStorage.setItem('tagList', JSON.stringify(defaultTagList));
-        localTagList =  window.localStorage.getItem('tagList');
+        localTagList = window.localStorage.getItem('tagList');
       }
       state.tagList = JSON.parse(localTagList!);
     },
     setSelectedTag(state, name) {
-      state.selectedTag = state.tagList.filter(tag => tag.name === name)[0];
+      state.selectedTag = _.cloneDeep(state.tagList.filter(tag => tag.name === name)[0]);
     }
 
     // createTag(state, name: string) {

@@ -21,8 +21,8 @@
     </div>
 
     <div class="tags">
-      <Tags @update-tags="record.tags = $event"
-            :value="record.tags" :type="record.type"/>
+      <Tags @update-tags="record.tag = $event"
+            :value="record.tag" :type="record.type"/>
     </div>
 
     <div class="tabs">
@@ -39,7 +39,7 @@
   import FormItem from '@/components/FormItem.vue';
   import Tags from '@/components/Money/Tags.vue';
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, Watch} from 'vue-property-decorator';
   import store from '@/store';
   import Tabs from '@/components/tabs.vue';
   import typeList from '@/constants/typeList';
@@ -48,8 +48,18 @@
     components: {Tabs, Tags, FormItem, NumberPad},
   })
   export default class Money extends Vue {
+    get selectedTag() {
+      return store.getters.getSelectedTag;
+    }
+
+    @Watch('selectedTag')
+    onValueChange(val: Tag, oldVal: Tag) {
+      this.record.tag = this.selectedTag
+    }
+
+
     record: RecordItem = {
-      tags: [],
+      tag: {name:'toBeSelected',text:'待选'},
       notes: '',
       type: '-',
       amount: 0,
@@ -71,14 +81,14 @@
 
 
     saveRecord() {
-      if (!this.record.tags || this.record.tags.length === 0) {
-        window.alert('请至少选择一个标签');
+      if (this.record.tag.name === 'toBeSelected') {
+        window.alert('请选择一个标签');
         return;
       }
       store.commit('createRecord', this.record);
       window.alert('保存成功');
       this.record.notes = '';
-      this.record.tags = [];
+      this.record.tag = {name: 'toBeSelected', text: '待选'};
     }
   }
 </script>
@@ -88,7 +98,7 @@
   display: flex;
   flex-direction: column-reverse;
 
-  .tags{
+  .tags {
     flex-grow: 1;
     background-color: #000000;
     display: flex;

@@ -69,11 +69,7 @@
     }
 
     get selectedTag():Tag {
-      let tag = store.state.selectedTag;
-      if (!tag) {
-        tag = {name: 'toBeSelected', text: '待选'};
-      }
-      return tag;
+      return store.state.selectedTag;
     }
 
     get incomeTagList(): Tag[] {
@@ -97,7 +93,9 @@
           const name = li.getAttribute('value');
           if (name) {
             const selectedTag = this.findTag(name, this.tagList);
-            if (selectedTag) store.commit('setSelectedTag', selectedTag.name);
+            if (selectedTag) {
+              store.commit('setSelectedTag', selectedTag.name);
+            }
           }
         }
       }

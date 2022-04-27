@@ -1,5 +1,5 @@
 interface RecordItem {
-  tags: Tag[];
+  tag: Tag;
   notes: string;
   type: '-'|'+';
   amount: number;
