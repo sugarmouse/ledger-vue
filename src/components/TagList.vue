@@ -36,7 +36,6 @@
       this.tagList = store.state.tagList
     }
 
-
     get outgoTagList() {
       return this.tagList.filter(tag => tag.type === this.type);
     }
@@ -80,7 +79,7 @@
 
   .tagList {
     font-size: 16px;
-    padding: 0 16px;
+    padding: 0 8px;
     overflow: scroll;
     height: 100%;
 
@@ -89,7 +88,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
+      padding: 8px;
+      background-color: lighten($background,20%);
+      margin: 6px 0;
+      border-radius: 8px;
       border-bottom: 1px solid rgba(27, 26, 28, 0.99);
 
       svg {

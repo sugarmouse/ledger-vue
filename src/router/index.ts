@@ -30,7 +30,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path:'/incomeTagList',
-    component:IncomeTagList
+    component:IncomeTagList,
   },
   {
     path:'/outgoTagList',
@@ -38,7 +38,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/labels/edit/:id',
-    component: EditTag
+    component: EditTag,
   },
   {
     path: '*',

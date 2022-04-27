@@ -3,11 +3,11 @@
     <div class="tags-wrapper">
       <div class="selected-tag">
         <span class="describe">选中的标签：</span>
-        <TagItem :tag="selectedTagName"/>
+        <TagItem :tag="selectedTag"/>
       </div>
       <div class="all-tags">
         <div class="outgoTags" v-if="type==='-'">
-          <ul class="tags" @click="selectTag">
+          <ul class="tags" @click="onTagClick">
             <li class="tag" v-for="tag in outgoTagList"
                 :value="tag.name"
                 :key="tag.name">
@@ -26,7 +26,7 @@
           </ul>
         </div>
         <div v-else class="incomeTags">
-          <ul class="tags" @click="selectTag">
+          <ul class="tags" @click="onTagClick">
             <li class="tag" v-for="tag in incomeTagList"
                 :value="tag.name"
                 :key="tag.name">
@@ -64,10 +64,17 @@
   })
   export default class Tags extends mixins(TagHelper) {
     @Prop() type!: '-' | '+';
-    selectedTagName: Tag = {name: 'toBeSelected', text: '待选'};
 
     get tagList(): Tag[] {
       return store.state.tagList;
+    }
+
+    get selectedTag():Tag {
+      let tag = store.state.selectedTag;
+      if (!tag) {
+        tag = {name: 'toBeSelected', text: '待选'};
+      }
+      return tag;
     }
 
     get incomeTagList(): Tag[] {
@@ -75,7 +82,7 @@
     }
 
     get outgoTagList(): Tag[] {
-      return this.findTypedTagList('-').slice(0, 9);
+      return this.findTypedTagList('-').slice(0, 8);
     }
 
 
@@ -83,7 +90,7 @@
       store.commit('fetchTags');
     }
 
-    selectTag(event: PointerEvent) {
+    onTagClick(event: PointerEvent) {
       const target = event.target;
       if (target instanceof Element) {
         const li = target.closest('li');
@@ -91,7 +98,7 @@
           const name = li.getAttribute('value');
           if (name) {
             const selectedTag = this.findTag(name, this.tagList);
-            if (selectedTag) this.selectedTagName = selectedTag;
+            if (selectedTag) store.commit('setSelectedTag', selectedTag.name);
           }
         }
       }
@@ -106,7 +113,6 @@
     }
 
     findTypedTagList(type: '-' | '+') {
-      // _.filter(this.tagList,)
       return this.tagList.filter(tag => tag.type === type);
     }
   }

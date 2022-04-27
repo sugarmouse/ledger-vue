@@ -8,15 +8,16 @@ Vue.use(Vuex);
 type RootState = {
   recordList: RecordItem[],
   tagList: Tag[],
-  currentTag?: Tag
+  selectedTag?: Tag
 }
 
 const store = new Vuex.Store({
   state: {
     recordList: [],
     tagList: [],
-    currentTag: undefined
+    selectedTag: undefined
   } as RootState,
+
   mutations: {
     fetchRecords(state) {
       state.recordList = JSON.parse(window.localStorage.getItem('recordList') || '[]') as RecordItem[];
@@ -39,8 +40,8 @@ const store = new Vuex.Store({
       }
       state.tagList = JSON.parse(localTagList!);
     },
-    setCurrentTag(state, name) {
-      state.currentTag = state.tagList.filter(tag => tag.name === name)[0];
+    setSelectedTag(state, name) {
+      state.selectedTag = state.tagList.filter(tag => tag.name === name)[0];
     }
 
     // createTag(state, name: string) {
