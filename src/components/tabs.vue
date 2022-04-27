@@ -34,15 +34,10 @@
   background: $background;
   display: flex;
   justify-content: space-around;
-  padding: 6px;
+  padding: 0 6px;
   text-align: center;
   font-size: 24px;
-  :first-child{
-    background-color: #CF4321;
-  }
-  :last-child{
-    background-color: #223160;
-  }
+
   > li {
     width: 40%;
     height: 64px;
