@@ -34,28 +34,26 @@
   background: $background;
   display: flex;
   justify-content: space-around;
+  align-items: center;
   padding: 0 6px;
   text-align: center;
   font-size: 24px;
+  height: $tab-height;
 
   > li {
-    width: 40%;
-    height: 64px;
+    width: 20%;
+    height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     border-radius: 8px;
 
-    &.selected::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: #d9d9d9;
+    &.selected{
+      background: lighten($color-highlight, 20%) ;
+      color: #000000;
     }
+
   }
 }
 

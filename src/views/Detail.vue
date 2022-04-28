@@ -2,14 +2,14 @@
   <div>
     <Layout>
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
-      <ol v-if="groupedList.length>0">
-        <li v-for="(groupedRecords,index) in groupedList" :key="index">
+      <ol class="all-tags-wrapper" v-if="groupedList.length>0">
+        <li class="group-tags-wrapper" v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
           <ol>
             <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
               <TagItem :tag="{name:record.tag.name, text:record.tag.text}"/>
               <span class="notes">{{ record.notes }}</span>
-              <span>￥{{ record.amount }}</span>
+              <span class="amount">￥{{ record.amount }}</span>
             </li>
           </ol>
         </li>
@@ -97,39 +97,20 @@
 </script>
 
 <style lang="scss" scoped>
-.chart {
-  width: 430%;
+@import "~@/assets/style/helper.scss";
 
-  &-wrapper {
-    overflow: scroll;
-
-    &::-webkit-scrollbar {
-      display: none;
+::v-deep .types-tabs {
+  .types-tabs-item {
+    &.selected {
+      background: $basic-font;
     }
   }
 }
+
 
 .noResult {
   padding: 16px;
   text-align: center;
-}
-
-::v-deep .types-tabs-item {
-  background: #c4c4c4;
-
-  &.selected {
-    background-color: #fff;
-
-    &::after {
-      display: none;
-    }
-  }
-}
-
-.interval-tabs::v-deep {
-  .interval-tabs-item {
-    height: 48px;
-  }
 }
 
 %item {
@@ -140,19 +121,48 @@
   align-items: center;
 }
 
-.title {
-  @extend %item
-}
+.all-tags-wrapper {
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
-.record {
-  background: #ffffff;
-  @extend %item
-}
+  height: calc(100vh - #{$tab-height} - 54px);
+  overflow: scroll;
+  margin: 0 2px;
 
-.notes {
-  margin-right: auto;
-  margin-left: 8px;
-  color: #999;
+  .group-tags-wrapper {
+    margin-bottom: 6px;
+    border-radius: 20px;
+
+    .title {
+      @extend %item;
+      background: $color-highlight;
+      border-radius: 20px 20px 0 0;
+      color: #000000;
+    }
+
+    ol {
+      .record {
+        background: #000000;
+        @extend %item;
+
+        .notes {
+          margin-right: auto;
+          margin-left: 8px;
+          color: $lighter-font;
+          font-size: 18px;
+          white-space: nowrap;
+          overflow: scroll;
+          flex-shrink: 999999;
+
+        }
+      }
+
+
+    }
+
+
+  }
 }
 
 
