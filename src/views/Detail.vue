@@ -2,9 +2,6 @@
   <div>
     <Layout>
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
-      <div class="chart-wrapper" ref="chartWrapper">
-        <Chart class="chart" :options="chartOptions"/>
-      </div>
       <ol v-if="groupedList.length>0">
         <li v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
@@ -48,66 +45,12 @@
       return;
     }
 
-    mounted() {
-      const $div = this.$refs.chartWrapper as HTMLDivElement;
-      $div.scrollLeft = $div.scrollWidth;
-    }
-
-    get chartOptions() {
-      const today = new Date();
-      const keyValueList = [];
-      for (let i = 0; i <= 29; i++) {
-        const date = dayjs(today).subtract(i, 'day').format('YYYY-MM-DD');
-        const found = _.find(this.groupedList, {title: date});
-        const amount = found ? found.total : 0;
-        keyValueList.push({key: date, value: amount});
-      }
-      const dateList = keyValueList.map(item => item.key).reverse();
-      const amountList = keyValueList.map(item => item.value).reverse();
-
-      return {
-        grid: {
-          left: 0,
-          right: 0,
-        },
-        xAxis: {
-          type: 'category',
-          data: dateList,
-          axisTick: {alignWithLabel: true},
-          axisLine: {lineStyle: {color: '#666'}},
-          axisLabel: {
-            formatter: function (value: string) {
-              return value.substring(5);
-            }
-
-          }
-        },
-        yAxis: {
-          type: 'value',
-          show: false
-        },
-        series: [
-          {
-            symbolSize: 10,
-            itemStyle: {borderWidth: 1, color: '#666'},
-            data: amountList,
-            type: 'line'
-          }
-        ],
-        tooltip: {
-          show: true,
-          triggerOn: 'click',
-          formatter: '{c}'
-        },
-      };
-    }
 
     get recordList(): RecordItem[] {
       return store.state.recordList;
     }
 
     get groupedList(): Result {
-
       const recordList = _.cloneDeep(this.recordList);
       if (recordList.length === 0) return [];
 
