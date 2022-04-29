@@ -31,6 +31,7 @@
   import Chart from '@/components/Chart.vue';
   import TagItem from '@/components/TagItem.vue';
   import recordTypeList from '@/constants/recordTypeList';
+  import {accAdd, accSub} from '@/lib/math.ts';
 
 
   const oneDay = 86400 * 1000;
@@ -89,9 +90,9 @@
       result.map(group => {
         group.total = group.items.reduce((sum, item) => {
           if (item.type === '-') {
-            return sum - item.amount;
+            return accSub(sum, item.amount);
           } else {
-            return sum + item.amount;
+            return accAdd(sum, item.amount);
           }
         }, 0);
       });
@@ -99,7 +100,7 @@
     }
 
 
-    beautifyDate(date: string) {
+    beautifyDate(date: string):string {
       const now = new Date();
       const day = dayjs(date);
       const toNowInDay = (n: number) => {
@@ -180,7 +181,6 @@
 
     ol {
       .record {
-        background: #000000;
         @extend %item;
 
         .notes {
@@ -189,21 +189,27 @@
           color: $lighter-font;
           font-size: 18px;
           white-space: nowrap;
-          overflow: scroll;
           flex-shrink: 999999;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .amount {
+          display: inline-block;
+          height: 24px;
+          line-height: 24px;
+          vertical-align: baseline;
+          margin-left: 6px;
+
           &.in {
-            color: green;
+            color: $color-highlight;
           }
 
           &.out {
-            color: rgba(255, 0, 0, 0.98);
+            color: rgb(203, 85, 73);
           }
         }
       }
-
 
     }
 

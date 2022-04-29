@@ -3,7 +3,7 @@
     <router-link to="/home" class="item" active-class="selected">
       <Icon name="home"/>
       <div class="font">
-        记账
+        首页
       </div>
     </router-link>
     <router-link to="/detail" class="item" active-class="selected">
