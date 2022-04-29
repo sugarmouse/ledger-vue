@@ -1,7 +1,7 @@
 <template>
   <div>
     <Layout bar-name="收支明细" :has-top-button="false">
-      <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
+      <Tabs :data-source="typeData" class-prefix="detail" :value.sync="selectedType"/>
       <ol class="all-tags-wrapper" v-if="groupedList.length>0">
         <li class="group-tags-wrapper" v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
@@ -9,7 +9,9 @@
             <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
               <TagItem :tag="{name:record.tag.name, text:record.tag.text}"/>
               <span class="notes">{{ record.notes }}</span>
-              <span class="amount">￥{{ record.amount }}</span>
+              <span class="amount" :class="record.type === '-' ? 'out' : 'in' ">{{
+                  record.type === '-' ? '-' : '+'
+                }}￥{{ record.amount }}</span>
             </li>
           </ol>
         </li>
@@ -25,10 +27,10 @@
   import {Component} from 'vue-property-decorator';
   import Vue from 'vue';
   import Tabs from '@/components/tabs.vue';
-  import typeList from '@/constants/typeList';
   import store from '@/store';
   import Chart from '@/components/Chart.vue';
   import TagItem from '@/components/TagItem.vue';
+  import recordTypeList from '@/constants/recordTypeList';
 
 
   const oneDay = 86400 * 1000;
@@ -37,8 +39,8 @@
     components: {TagItem, Tabs, Chart}
   })
   export default class Detail extends Vue {
-    selectedType = '-';
-    typeData = typeList;
+    selectedType = 'all';
+    typeData = recordTypeList;
 
     created(): void {
       store.commit('fetchRecords');
@@ -50,14 +52,24 @@
       return store.state.recordList;
     }
 
+    sortRecordList(recordList: RecordItem[]): RecordItem[] {
+      if (this.selectedType !== 'all') {
+        return recordList
+            .filter(r => r.type === this.selectedType)
+            .sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
+            .reverse();
+      } else {
+        return recordList
+            .sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
+            .reverse();
+      }
+    }
+
     get groupedList(): Result {
       const recordList = _.cloneDeep(this.recordList);
       if (recordList.length === 0) return [];
 
-      const sortedRecordList = recordList
-          .filter(r => r.type === this.selectedType)
-          .sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
-          .reverse();
+      const sortedRecordList = this.sortRecordList(recordList);
       if (sortedRecordList.length === 0) return [];
 
       const result: Result = [{
@@ -75,7 +87,13 @@
         }
       }
       result.map(group => {
-        group.total = group.items.reduce((sum, item) => sum + item.amount, 0);
+        group.total = group.items.reduce((sum, item) => {
+          if (item.type === '-') {
+            return sum - item.amount;
+          } else {
+            return sum + item.amount;
+          }
+        }, 0);
       });
       return result;
     }
@@ -99,12 +117,32 @@
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
 
-::v-deep .types-tabs {
-  .types-tabs-item {
-    &.selected {
-      background: $basic-font;
+::v-deep .detail-tab-wrapper {
+  margin: 0;
+  padding: 0;
+  background: $background;
+
+  .detail-describe {
+
+  }
+
+  .detail-tabs {
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+
+    .detail-tabs-item {
+      font-size: 16px;
+      height: 34px;
+      width: 58px;
+      margin: 0 6px 0 0;
+
+      &.selected {
+
+      }
     }
   }
+
 }
 
 
@@ -126,7 +164,7 @@
     display: none;
   }
 
-  height: calc(100vh - #{$tab-height} - 54px);
+  height: calc(100vh - #{$tab-height} - #{$nav-height} - #{$top-bar-height});
   overflow: scroll;
   margin: 0 2px;
 
@@ -136,9 +174,8 @@
 
     .title {
       @extend %item;
-      background: $color-highlight;
+      background: #333;
       border-radius: 20px 20px 0 0;
-      color: #000000;
     }
 
     ol {
@@ -154,7 +191,16 @@
           white-space: nowrap;
           overflow: scroll;
           flex-shrink: 999999;
+        }
 
+        .amount {
+          &.in {
+            color: green;
+          }
+
+          &.out {
+            color: rgba(255, 0, 0, 0.98);
+          }
         }
       }
 

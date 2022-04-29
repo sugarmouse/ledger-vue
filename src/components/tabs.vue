@@ -1,9 +1,9 @@
 <template>
-  <div class="tab-wrapper">
-    <div v-if="hasDescribe" class="describe">
+  <div class="tab-wrapper" :class="propClass('tab-wrapper')" >
+    <div v-if="hasDescribe" class="describe" :class="propClass('describe')">
       {{ describe }}
     </div>
-    <ul class="tabs" :class="{[classPrefix+'-tabs']:classPrefix}">
+    <ul class="tabs" :class="propClass('tabs')">
       <li v-for="item in dataSource"
           :class="liClass(item)"
           :key="item.value"
@@ -29,6 +29,9 @@
 
     liClass(item: DataSourceItem) {
       return {selected: item.value === this.value, [this.classPrefix + '-tabs-item']: this.classPrefix};
+    }
+    propClass( defaultClass:string){
+        return {[this.classPrefix+'-'+defaultClass]:this.classPrefix}
     }
 
     select(item: DataSourceItem) {
@@ -74,9 +77,10 @@
       justify-content: center;
       align-items: center;
       border-radius: 20px;
-      border: 1px solid $lighter-font;
-      &:first-child{
-        margin-right:20px ;
+      border: 1px solid $darker-font;
+      margin-right:20px ;
+      &:last-child{
+        margin-right:0 ;
       }
 
       &.selected {
