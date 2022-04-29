@@ -28,6 +28,8 @@
     <div class="tabs">
       <Tabs :data-source="typeData"
             class-prefix="types"
+            :has-describe="true"
+            describe="选择分类："
             :value.sync="record.type"/>
     </div>
 

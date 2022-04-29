@@ -2,7 +2,7 @@
   <div>
     <div class="tags-wrapper">
       <div class="selected-tag">
-        <span class="describe">选中的标签：</span>
+        <span class="describe">选择标签：</span>
         <TagItem :tag="selectedTag"/>
       </div>
       <div class="all-tags">
