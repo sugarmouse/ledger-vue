@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Layout>
+    <Layout bar-name="收支明细" :has-top-button="false">
       <Tabs :data-source="typeData" class-prefix="types" :value.sync="selectedType"/>
       <ol class="all-tags-wrapper" v-if="groupedList.length>0">
         <li class="group-tags-wrapper" v-for="(groupedRecords,index) in groupedList" :key="index">

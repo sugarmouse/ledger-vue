@@ -1,5 +1,5 @@
 <template>
-  <Layout class-prefix="money">
+  <Layout class-prefix="money"  bar-name="添加记录" :has-top-button="false">
     <div class="numberPad">
       <NumberPad
           @update-output="onUpdateOutput"
@@ -31,6 +31,7 @@
             :value.sync="record.type"/>
     </div>
 
+
   </Layout>
 </template>
 
@@ -43,9 +44,10 @@
   import store from '@/store';
   import Tabs from '@/components/tabs.vue';
   import typeList from '@/constants/typeList';
+  import TabBar from '@/components/TopBar.vue';
 
   @Component({
-    components: {Tabs, Tags, FormItem, NumberPad},
+    components: {TabBar, Tabs, Tags, FormItem, NumberPad},
   })
   export default class Money extends Vue {
     get selectedTag() {

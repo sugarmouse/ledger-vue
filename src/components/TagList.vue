@@ -1,19 +1,18 @@
 <template>
   <div class="wrapper">
-    <div class="navBar">
-      <Icon class="leftIcon" name="left" @click="goBack"></Icon>
-      <span>{{ barName }}</span>
-      <span class="rightIcon"></span>
-    </div>
-    <div class="tagList-wrapper">
-      <ul class="tagList" @click="onTagClick">
-        <li class="tag" v-for="tag in outgoTagList" :key="tag.name" :value="tag.name">
-          <Icon :name="tag.name"></Icon>
-          <span class="text">{{ tag.text }}</span>
-        </li>
-      </ul>
-    </div>
+    <Layout :has-nav="false" @clickLeftButton="goBack" bar-name="支出标签">
+      <div class="tagList-wrapper">
+        <ul class="tagList" @click="onTagClick">
+          <li class="tag" v-for="tag in outgoTagList" :key="tag.name" :value="tag.name">
+            <Icon :name="tag.name"></Icon>
+            <span class="text">{{ tag.text }}</span>
+          </li>
+        </ul>
+      </div>
+    </Layout>
   </div>
+
+
 </template>
 
 <script lang="ts">
@@ -22,9 +21,10 @@
   import TagItem from '@/components/TagItem.vue';
   import {mixins} from 'vue-class-component';
   import {TagHelper} from '@/mixins/TagHelper';
+  import TabBar from '@/components/TopBar.vue';
 
   @Component({
-    components: {TagItem}
+    components: {TabBar, TagItem}
   })
   export default class OutgoTagList extends mixins(TagHelper) {
     @Prop({required: true}) barName!: string;
@@ -72,29 +72,6 @@
 <style lang="scss" scoped>
 @use "sass:math";
 @import "~@/assets/style/helper.scss";
-
-.navBar {
-  text-align: center;
-  font-size: 16px;
-  padding: 12px 16px;
-  background: $background;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  > .title {
-  }
-
-  > .leftIcon {
-    width: 24px;
-    height: 24px;
-  }
-
-  > .rightIcon {
-    width: 24px;
-    height: 24px;
-  }
-}
 
 .tagList-wrapper {
   height: calc(100vh - 48px);

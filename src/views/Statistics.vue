@@ -1,5 +1,5 @@
 <template>
-  <Layout>
+  <Layout bar-name="统计图示" :has-top-button="false">
     <Tabs :data-source="typeData" class-prefix="typesInStatistics" :value.sync="selectedType"/>
     <div class="chart-wrapper" ref="chartWrapper">
       <Chart class="chart" :options="chartOptions"/>
