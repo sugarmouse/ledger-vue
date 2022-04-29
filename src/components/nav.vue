@@ -1,7 +1,7 @@
 <template>
   <nav>
-    <router-link to="/money" class="item" active-class="selected">
-      <Icon name="money"/>
+    <router-link to="/home" class="item" active-class="selected">
+      <Icon name="home"/>
       <div class="font">
         记账
       </div>

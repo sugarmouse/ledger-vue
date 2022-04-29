@@ -7,14 +7,19 @@ import EditTag from '@/views/EditTag.vue';
 import IncomeTagList from '@/views/IncomeTagList.vue';
 import OutgoTagList from '@/views/OutgoTagList.vue';
 import Statistics from '@/views/Statistics.vue';
+import Home from '@/views/Home.vue';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'money',
-    component: Money
+    name: 'home',
+    component: Home
+  },
+  {
+    path:'/home',
+    component:Home
   },
   {
     path: '/money',

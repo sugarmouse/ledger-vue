@@ -1,5 +1,8 @@
 <template>
-  <Layout class-prefix="money"  bar-name="添加记录" :has-top-button="false">
+  <Layout class-prefix="money"
+          bar-name="添加记录"
+          @clickLeftButton="goBack"
+          :has-nav="false">
     <div class="numberPad">
       <NumberPad
           @update-output="onUpdateOutput"
@@ -78,6 +81,9 @@
     created() {
       store.commit('fetchRecords');
     }
+    goBack(){
+      this.$router.replace('/home')
+    }
 
     onUpdateOutput(output: string) {
       this.record.amount = parseFloat(output);
@@ -101,13 +107,16 @@
 .money-content {
   display: flex;
   flex-direction: column-reverse;
+  .numberPad{
+    margin-bottom: 8px;
+  }
 
   .tags {
     flex-grow: 1;
     background-color: #000000;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
 
   .notes {
