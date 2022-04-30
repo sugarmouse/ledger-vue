@@ -28,7 +28,6 @@
   import Vue from 'vue';
   import Tabs from '@/components/tabs.vue';
   import store from '@/store';
-  import Chart from '@/components/Chart.vue';
   import TagItem from '@/components/TagItem.vue';
   import recordTypeList from '@/constants/recordTypeList';
   import {accAdd, accSub} from '@/lib/math.ts';
@@ -37,7 +36,7 @@
   const oneDay = 86400 * 1000;
   type Result = { title: string, total?: number, items: RecordItem[] }[]
   @Component({
-    components: {TagItem, Tabs, Chart}
+    components: {TagItem, Tabs}
   })
   export default class Detail extends Vue {
     selectedType = 'all';
@@ -45,7 +44,6 @@
 
     created(): void {
       store.commit('fetchRecords');
-      return;
     }
 
 
