@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import _ from 'lodash';
 import defaultTagList from '@/constants/defaultTagList';
+import createId from '@/lib/idCreator';
 
 Vue.use(Vuex);
 
@@ -31,6 +32,7 @@ const store = new Vuex.Store({
     createRecord(state, record: RecordItem) {
       const x = _.cloneDeep(record);
       x.createdAt = x.createdAt || new Date().toISOString();
+      x.id = createId()
       state.recordList.push(x);
       store.commit('saveRecords');
     },

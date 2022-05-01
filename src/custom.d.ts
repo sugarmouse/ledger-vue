@@ -3,6 +3,7 @@ interface RecordItem {
   notes: string;
   type: '-' | '+';
   amount: number;
+  id?: number;
   createdAt?: string;
 }
 
