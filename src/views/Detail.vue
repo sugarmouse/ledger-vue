@@ -25,84 +25,40 @@
   import _ from 'lodash';
   import dayjs from 'dayjs';
   import {Component} from 'vue-property-decorator';
-  import Vue from 'vue';
   import Tabs from '@/components/tabs.vue';
   import store from '@/store';
   import TagItem from '@/components/TagItem.vue';
   import recordTypeList from '@/constants/recordTypeList';
-  import {accAdd, accSub} from '@/lib/math.ts';
+  import {mixins} from 'vue-class-component';
+  import {RecordHelper} from '@/mixins/RecordHelper';
 
-
-  const oneDay = 86400 * 1000;
-  type Result = { title: string, total?: number, items: RecordItem[] }[]
   @Component({
     components: {TagItem, Tabs}
   })
-  export default class Detail extends Vue {
-    selectedType = 'all';
+  export default class Detail extends mixins(RecordHelper) {
+    selectedType: ExtendType = 'all';
     typeData = recordTypeList;
 
     created(): void {
       store.commit('fetchRecords');
     }
 
-
     get recordList(): RecordItem[] {
       return store.state.recordList;
     }
 
-    sortRecordList(recordList: RecordItem[]): RecordItem[] {
-      if (this.selectedType !== 'all') {
-        return recordList
-            .filter(r => r.type === this.selectedType)
-            .sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
-            .reverse();
-      } else {
-        return recordList
-            .sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
-            .reverse();
-      }
+    get groupedList(): GroupedList {
+      const copyList = _.cloneDeep(this.recordList);
+      let typedList = this.typeRecordList(this.selectedType, copyList);
+      if (typedList.length === 0) return [];
+      return this.groupListWithTotal(this.selectedType, this.groupRecordList(typedList));
     }
 
-    get groupedList(): Result {
-      const recordList = _.cloneDeep(this.recordList);
-      if (recordList.length === 0) return [];
-
-      const sortedRecordList = this.sortRecordList(recordList);
-      if (sortedRecordList.length === 0) return [];
-
-      const result: Result = [{
-        title: dayjs(sortedRecordList[0].createdAt).format('YYYY-MM-DD'),
-        items: [sortedRecordList[0]]
-      }];
-
-      for (let i = 1; i < sortedRecordList.length; i++) {
-        const current = sortedRecordList[i];
-        const last = result[result.length - 1];
-        if (dayjs(last.title).isSame(dayjs(current.createdAt), 'day')) {
-          last.items.push(sortedRecordList[i]);
-        } else {
-          result.push({title: dayjs(sortedRecordList[i].createdAt).format('YYYY-MM-DD'), items: [sortedRecordList[i]]});
-        }
-      }
-      result.map(group => {
-        group.total = group.items.reduce((sum, item) => {
-          if (item.type === '-') {
-            return accSub(sum, item.amount);
-          } else {
-            return accAdd(sum, item.amount);
-          }
-        }, 0);
-      });
-      return result;
-    }
-
-
-    beautifyDate(date: string):string {
+    beautifyDate(date: string): string {
       const now = new Date();
       const day = dayjs(date);
       const toNowInDay = (n: number) => {
-        return day.isSame(now.valueOf() - oneDay * n, 'day');
+        return day.isSame(now.valueOf() - 86400 * 1000 * n, 'day');
       };
       if (toNowInDay(0)) return '今天';
       if (toNowInDay(1)) return '昨天';

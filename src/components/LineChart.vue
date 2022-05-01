@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-wrapper" ref="chartWrapper" >
+  <div class="chart-wrapper" ref="chartWrapper">
     <div class='lineChart chart'></div>
   </div>
 
@@ -7,28 +7,30 @@
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
   import {Component, Prop, Watch} from 'vue-property-decorator';
   import echarts, {EChartOption, ECharts} from 'echarts';
   import dayjs from 'dayjs';
   import _ from 'lodash';
   import store from '@/store';
+  import {mixins} from 'vue-class-component';
+  import {RecordHelper} from '@/mixins/RecordHelper';
 
   type Result = { title: string, total?: number, items: RecordItem[] }[]
   @Component
-  export default class LineChart extends Vue {
-    @Prop({default:'-'}) selectedType!: '-' | '+' ;
+  export default class LineChart extends mixins(RecordHelper) {
+    @Prop({default: '-'}) selectedType!: '-' | '+';
     myChart!: ECharts;
 
     @Watch('lineChartOptions')
-    onOptionsChange(newValue: EChartOption) {
-      this.lineChartOptions && this.myChart!.setOption(newValue);
+    onOptionsChange(newValue: EChartOption): void {
+      if (this.lineChartOptions) this.myChart.setOption(newValue);
     }
+
     created(): void {
       store.commit('fetchRecords');
     }
 
-    mounted() {
+    mounted():void {
       const chartDom = document.querySelector('.lineChart') as HTMLDivElement;
       this.myChart = echarts.init(chartDom);
       this.myChart.setOption(this.lineChartOptions);
@@ -42,37 +44,13 @@
     }
 
     get groupedList(): Result {
-
-      const recordList = _.cloneDeep(this.recordList);
-      if (recordList.length === 0) return [];
-
-      const sortedRecordList = recordList
-          .filter(r => r.type === this.selectedType)
-          .sort((a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf())
-          .reverse();
-      if (sortedRecordList.length === 0) return [];
-
-      const result: Result = [{
-        title: dayjs(sortedRecordList[0].createdAt).format('YYYY-MM-DD'),
-        items: [sortedRecordList[0]]
-      }];
-
-      for (let i = 1; i < sortedRecordList.length; i++) {
-        const current = sortedRecordList[i];
-        const last = result[result.length - 1];
-        if (dayjs(last.title).isSame(dayjs(current.createdAt), 'day')) {
-          last.items.push(sortedRecordList[i]);
-        } else {
-          result.push({title: dayjs(sortedRecordList[i].createdAt).format('YYYY-MM-DD'), items: [sortedRecordList[i]]});
-        }
-      }
-      result.map(group => {
-        group.total = group.items.reduce((sum, item) => sum + item.amount, 0);
-      });
-      return result;
+      const copyList = _.cloneDeep(this.recordList);
+      let typedList = this.typeRecordList(this.selectedType, copyList);
+      if (typedList.length === 0) return [];
+      return this.groupListWithTotal(this.selectedType, this.groupRecordList(typedList));
     }
 
-    get lineChartOptions():EChartOption {
+    get lineChartOptions(): EChartOption {
       const today = new Date();
       const keyValueList = [];
       for (let i = 0; i <= 29; i++) {
@@ -90,7 +68,7 @@
           right: 0,
         },
         xAxis: {
-          type:'category',
+          type: 'category',
           data: dateList,
           axisTick: {alignWithLabel: true},
           axisLine: {lineStyle: {color: '#666'}},
@@ -98,7 +76,6 @@
             formatter: function (value: string) {
               return value.substring(5);
             }
-
           }
         },
         yAxis: {
@@ -126,6 +103,7 @@
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
+
 .chart {
   width: 430%;
   height: $chart-height;
@@ -136,6 +114,7 @@
     width: $chart-width;
     background-color: #222222;
     border-radius: 10px;
+
     &::-webkit-scrollbar {
       display: none;
     }
