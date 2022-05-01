@@ -18,6 +18,12 @@ interface GroupedRecordItem {
   total?: number
 }
 
+interface TagGroupedRecordItem {
+  tag: Tag,
+  items: RecordItem[]
+}
 
- type GroupedList = GroupedRecordItem[]
- type ExtendType = '-' | '+' | 'all'
+type TagGroupRecordList = TagGroupedRecordItem[]
+
+type GroupedList = GroupedRecordItem[]
+type ExtendType = '-' | '+' | 'all'

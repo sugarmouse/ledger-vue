@@ -30,7 +30,7 @@
       store.commit('fetchRecords');
     }
 
-    mounted():void {
+    mounted(): void {
       const chartDom = document.querySelector('.lineChart') as HTMLDivElement;
       this.myChart = echarts.init(chartDom);
       this.myChart.setOption(this.lineChartOptions);
@@ -51,16 +51,10 @@
     }
 
     get lineChartOptions(): EChartOption {
-      const today = new Date();
-      const keyValueList = [];
-      for (let i = 0; i <= 29; i++) {
-        const date = dayjs(today).subtract(i, 'day').format('YYYY-MM-DD');
-        const found = _.find(this.groupedList, {title: date});
-        const amount = found ? found.total : 0;
-        keyValueList.push({key: date, value: amount});
-      }
-      const dateList = keyValueList.map(item => item.key).reverse();
-      const amountList = keyValueList.map(item => item.value).reverse();
+      // const keyValueList: { key: string, value: number }[] = [];
+      const monthRecordData =  this.complementGroupedRecordList(29, this.groupedList);
+      const dateList = monthRecordData.map(item => item.title).reverse();
+      const amountList = monthRecordData.map(item => item.total).reverse();
 
       return {
         grid: {
