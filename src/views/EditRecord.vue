@@ -200,6 +200,16 @@ $item-color: #111111;
       margin-right: auto;
       padding-left: $padding-lef;
     }
+
+    a {
+      background: #616161;
+      display: flex;
+      width: 40px;
+      height: 40px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+    }
   }
 
   .amount {
