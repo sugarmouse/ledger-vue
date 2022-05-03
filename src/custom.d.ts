@@ -3,7 +3,7 @@ interface RecordItem {
   notes: string;
   type: '-' | '+';
   amount: number;
-  id?: number;
+  id: number;
   createdAt?: string;
 }
 
@@ -23,7 +23,7 @@ interface TagGroupedRecordItem {
   tag: Tag,
   items: RecordItem[]
 }
-
+type Type = '-' | '+'
 type TagGroupRecordList = TagGroupedRecordItem[]
 
 type GroupedList = GroupedRecordItem[]

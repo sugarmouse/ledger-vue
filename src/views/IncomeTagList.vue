@@ -1,5 +1,5 @@
 <template>
-  <TagList bar-name="收入标签" type="+"/>
+  <TagList bar-name="收入标签" type="+" :back-url="backUrl"/>
 </template>
 
 <script lang="ts">
@@ -10,7 +10,7 @@
     components: {TagList}
   })
   export default class IncomeTagList extends Vue {
-
+    backUrl = this.$route.query.from ? this.$route.query.from : '/home';
   }
 </script>
 

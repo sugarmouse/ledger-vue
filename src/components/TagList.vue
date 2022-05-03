@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <Layout :has-nav="false" @clickLeftButton="goBack" bar-name="支出标签">
+    <Layout :has-nav="false" @clickLeftButton="goBack" :bar-name="barName">
       <div class="tagList-wrapper">
         <ul class="tagList" @click="onTagClick">
           <li class="tag" v-for="tag in outgoTagList" :key="tag.name" :value="tag.name">
@@ -29,21 +29,22 @@
   export default class OutgoTagList extends mixins(TagHelper) {
     @Prop({required: true}) barName!: string;
     @Prop({required: true}) type!: '-' | '+';
+    @Prop() backUrl!: string;
 
 
     created(): void {
       store.commit('fetchTags');
     }
 
-    get tagList() {
+    get tagList():Tag[] {
       return store.state.tagList;
     }
 
-    get outgoTagList() {
+    get outgoTagList():Tag[] {
       return this.tagList.filter(tag => tag.type === this.type);
     }
 
-    onTagClick(event: PointerEvent) {
+    onTagClick(event: PointerEvent):void {
       const target = event.target;
       if (target instanceof Element) {
         const li = target.closest('li');
@@ -52,8 +53,8 @@
           if (name) {
             const selectedTag = this.findTag(name, this.tagList);
             if (selectedTag) {
-              store.commit('setSelectedTag', selectedTag.name);
-              this.goBack();
+              // store.commit('setSelectedTag', selectedTag.name);
+              if(selectedTag.type) this.goBack(selectedTag.name, selectedTag.type);
             } else {
               window.alert('出错了');
             }
@@ -63,8 +64,14 @@
     }
 
 
-    goBack(): void {
-      this.$router.replace('/money');
+    goBack(tagName: string, type: Type): void {
+      this.$router.replace({
+        path: this.backUrl,
+        query: {
+          tagName: tagName,
+          type: type,
+        }
+      });
     }
   }
 </script>

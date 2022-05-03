@@ -1,5 +1,5 @@
 <template>
-  <TagList type="-" bar-name="支出标签"/>
+  <TagList type="-" bar-name="支出标签" :back-url="backUrl"/>
 </template>
 
 <script lang="ts">
@@ -11,6 +11,8 @@
     components: {TagList}
   })
   export default class OutgoTagList extends Vue {
+    backUrl = this.$route.query.from ? this.$route.query.from : '/home';
+
 
   }
 </script>

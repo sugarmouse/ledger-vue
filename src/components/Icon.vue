@@ -13,7 +13,11 @@
     console.log(e);
   }
   export default {
-    props: ['name'],
+    props:{
+      'name':{
+        required:true
+      }
+    },
     name: 'Icon'
   };
 </script>

@@ -1,19 +1,21 @@
 <template>
-  <div>
-    <label class="formItem">
+  <div class="formItem-wrapper" :class=" propClass('formItem-wrapper') ">
+    <label class="formItem" :class=" propClass('formItem') ">
       <template v-if="type==='date'">
-        <span class="name date">{{ this.fieldName }}</span>
+        <span v-if="fieldName" class="name date">{{ this.fieldName }}</span>
         <input :type="type || 'text'"
                class="date-input"
                :value="formatDate(value)"
+               :class=" propClass('input') "
                @input="onValueChange($event.target.value)"
                :placeholder="placeholder"/>
 
       </template>
       <template v-else>
-        <span class="name notes">{{ this.fieldName }}</span>
+        <span v-if="fieldName" class="name notes">{{ this.fieldName }}</span>
         <input :type="type || 'text'"
                :value="value"
+               :class=" propClass('input') "
                @input="onValueChange($event.target.value)"
                :placeholder="placeholder"/>
       </template>
@@ -29,16 +31,21 @@
 
   @Component
   export default class FormItem extends Vue {
-    @Prop({required: true}) fieldName!: string;
+    @Prop() fieldName?: string;
     @Prop() placeholder?: string;
     @Prop({default: ''}) value!: string;
     @Prop() type?: string;
+    @Prop() classPrefix?: string;
 
-    onValueChange(value: string) {
+    propClass(defaultClass: string): { [p: string]: string | undefined } {
+      return {[this.classPrefix + '-' + defaultClass]: this.classPrefix};
+    }
+
+    onValueChange(value: string):void {
       this.$emit('update:value', value);
     }
 
-    formatDate(isoString: string) {
+    formatDate(isoString: string):string {
       return dayjs(isoString).format('YYYY-MM-DD');
     }
   }
@@ -46,6 +53,7 @@
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
+
 
 .formItem {
   font-size: 14px;

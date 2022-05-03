@@ -3,11 +3,11 @@ import VueRouter, {RouteConfig} from 'vue-router';
 import Money from '@/views/Money.vue';
 import Detail from '@/views/Detail.vue';
 import NotFound from '@/views/NotFound.vue';
-import EditTag from '@/views/EditTag.vue';
 import IncomeTagList from '@/views/IncomeTagList.vue';
 import OutgoTagList from '@/views/OutgoTagList.vue';
 import Statistics from '@/views/Statistics.vue';
 import Home from '@/views/Home.vue';
+import EditRecord from '@/views/EditRecord.vue';
 
 Vue.use(VueRouter);
 
@@ -42,8 +42,8 @@ const routes: Array<RouteConfig> = [
     component:OutgoTagList
   },
   {
-    path: '/labels/edit/:id',
-    component: EditTag,
+    path: '/detail/edit/:id',
+    component: EditRecord,
   },
   {
     path: '*',

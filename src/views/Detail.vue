@@ -7,12 +7,15 @@
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
           <ol>
             <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
-              <TagItem :tag="{name:record.tag.name, text:record.tag.text}"/>
-              <span class="notes">{{ record.notes }}</span>
-              <span class="amount" :class="record.type === '-' ? 'out' : 'in' ">{{
-                  record.type === '-' ? '-' : '+'
-                }}￥{{ record.amount }}</span>
+              <router-link :to=" `/detail/edit/${record.id}` ">
+                <TagItem :tag="{name:record.tag.name, text:record.tag.text}"/>
+                <span class="notes">{{ record.notes }}</span>
+                <span class="amount" :class="record.type === '-' ? 'out' : 'in' ">{{
+                    record.type === '-' ? '-' : '+'
+                  }}￥{{ record.amount }}</span>
+              </router-link>
             </li>
+
           </ol>
         </li>
       </ol>
@@ -135,34 +138,37 @@
 
     ol {
       .record {
-        @extend %item;
+        a{
+          @extend %item;
 
-        .notes {
-          margin-right: auto;
-          margin-left: 8px;
-          color: $lighter-font;
-          font-size: 18px;
-          white-space: nowrap;
-          flex-shrink: 999999;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .amount {
-          display: inline-block;
-          height: 24px;
-          line-height: 24px;
-          vertical-align: baseline;
-          margin-left: 6px;
-
-          &.in {
-            color: $color-highlight;
+          .notes {
+            margin-right: auto;
+            margin-left: 8px;
+            color: $lighter-font;
+            font-size: 18px;
+            white-space: nowrap;
+            flex-shrink: 999999;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
 
-          &.out {
-            color: rgb(203, 85, 73);
+          .amount {
+            display: inline-block;
+            height: 24px;
+            line-height: 24px;
+            vertical-align: baseline;
+            margin-left: 6px;
+
+            &.in {
+              color: $color-highlight;
+            }
+
+            &.out {
+              color: rgb(203, 85, 73);
+            }
           }
         }
+
       }
 
     }

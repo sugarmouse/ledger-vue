@@ -24,8 +24,9 @@
     </div>
 
     <div class="tags">
-      <Tags @update-tags="record.tag = $event"
-            :value="record.tag" :type="record.type"/>
+      <Tags :selected-tag="record.tag"
+            :type="record.type"
+            @onTagClick="onUpdateTag"/>
     </div>
 
     <div class="tabs">
@@ -45,52 +46,66 @@
   import FormItem from '@/components/FormItem.vue';
   import Tags from '@/components/Money/Tags.vue';
   import Vue from 'vue';
-  import {Component, Watch} from 'vue-property-decorator';
+  import {Component} from 'vue-property-decorator';
   import store from '@/store';
   import Tabs from '@/components/tabs.vue';
   import typeList from '@/constants/typeList';
   import TabBar from '@/components/TopBar.vue';
+  import defaultTagList from '@/constants/defaultTagList';
+  import _ from 'lodash';
 
   @Component({
     components: {TabBar, Tabs, Tags, FormItem, NumberPad},
   })
   export default class Money extends Vue {
-    get selectedTag() {
-      return store.getters.getSelectedTag;
+
+    get newTagName(): string | (string | null)[] {
+      return this.$route.query.tagName;
     }
 
-    @Watch('selectedTag')
-    onValueChange(val: Tag, oldVal: Tag) {
-      this.record.tag = this.selectedTag
+    get newTag(): Tag | undefined {
+      if (this.newTagName) {
+        return _.find(defaultTagList, tag => tag.name === this.newTagName);
+      } else {
+        return this.record.tag;
+      }
     }
 
 
     record: RecordItem = {
-      tag: {name:'toBeSelected',text:'待选'},
+      tag: {name: 'toBeSelected', text: '待选'},
       notes: '',
       type: '-',
+      id: -1,
       amount: 0,
       createdAt: new Date().toISOString()
     };
     typeData = typeList;
 
-    get recordList() {
+    get recordList(): RecordItem[] {
       return store.state.recordList;
     }
 
-    created() {
+    created(): void {
       store.commit('fetchRecords');
-    }
-    goBack(){
-      this.$router.replace('/home')
+      if (this.newTag) this.record.tag = this.newTag;
     }
 
-    onUpdateOutput(output: string) {
+    goBack(): void {
+      this.$router.push('/home');
+    }
+
+    onUpdateOutput(output: string): void {
       this.record.amount = parseFloat(output);
     }
 
+    onUpdateTag(tagName: string): void {
+      const newTag = _.find(defaultTagList, tag => tag.name === tagName);
+      if (newTag) this.record.tag = newTag;
+    }
 
-    saveRecord() {
+
+    saveRecord(): void {
       if (this.record.tag.name === 'toBeSelected') {
         window.alert('请选择一个标签');
         return;
@@ -107,7 +122,8 @@
 .money-content {
   display: flex;
   flex-direction: column-reverse;
-  .numberPad{
+
+  .numberPad {
     margin-bottom: 8px;
   }
 
