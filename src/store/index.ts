@@ -3,6 +3,8 @@ import Vuex from 'vuex';
 import _ from 'lodash';
 import defaultTagList from '@/constants/defaultTagList';
 import createId from '@/lib/idCreator';
+import dayjs from 'dayjs';
+import axios from 'axios';
 
 Vue.use(Vuex);
 
@@ -10,6 +12,7 @@ type RootState = {
   recordList: RecordItem[],
   tagList: Tag[],
   selectedTag: Tag,
+  lunarDate: { year: string, month: string, day: string, msg:string};
 }
 
 const store = new Vuex.Store({
@@ -17,6 +20,7 @@ const store = new Vuex.Store({
     recordList: [],
     tagList: [],
     selectedTag: {name: 'toBeSelected', text: '待选'},
+    lunarDate: {year: '', month: '', day: '',msg:''}
   } as RootState,
   getters: {
     getSelectedTag: state => {
@@ -52,7 +56,29 @@ const store = new Vuex.Store({
       if (localTagList) state.tagList = JSON.parse(localTagList);
     },
   },
-  actions: {},
+  actions: {
+    lunarDate({state}) {
+      const today = new Date();
+      const date = dayjs(new Date()).format('YYYY-MM-DD-HH');
+      const unix_time = Math.floor(today.valueOf() / 1000);
+
+      axios.post('https://v2.alapi.cn/api/lunar', {
+        token: '7TfVHs1tnc72Sena',
+        date: date,
+        unix_time: unix_time
+      })
+        .then(res => {
+          state.lunarDate.year = res.data.data.lunar_year_chinese;
+          state.lunarDate.month = res.data.data.lunar_month_chinese;
+          state.lunarDate.day = res.data.data.lunar_day_chinese;
+          state.lunarDate.msg = res.data.msg;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+    }
+  },
   modules: {}
 });
 
