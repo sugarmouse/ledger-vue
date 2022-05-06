@@ -7,6 +7,21 @@ module.exports = {
     ? '/ledger-vue-website/'
     : '/',
   lintOnSave: false,
+  pwa: {
+    name: 'ledger',
+    themeColor: '#000000',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black',
+
+    // // configure the workbox plugin
+    // workboxPluginMode: 'InjectManifest',
+    // workboxOptions: {
+    //   // swSrc is required in InjectManifest mode.
+    //   swSrc: 'dev/sw.js',
+    //   // ...other Workbox options...
+    // }
+  },
   chainWebpack: config => {
     const dir = path.resolve(__dirname, 'src/assets/icons')
 
