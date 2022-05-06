@@ -49,9 +49,9 @@
   justify-content: space-around;
   align-items: center;
   background: lighten($background, 30%);
-  margin: 10px 20px 0 20px;
-  padding: 8px;
   border-radius: 10px;
+  margin: 4px 10px 0 10px;
+  padding:0 8px;
 
   .describe {
     font-size: 24px;

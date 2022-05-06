@@ -5,7 +5,9 @@
     <Tabs :data-source="typeData"
           class-prefix="typesInStatistics"
           :value.sync="selectedType"/>
+    <div class="describe">最近一个月金额走势</div>
     <LineChart :selected-type="selectedType"/>
+    <div class="describe">所有金额的分配</div>
     <PieChart :selected-type="selectedType"/>
   </Layout>
 </template>
@@ -34,11 +36,19 @@
 ::v-deep .statistic-content {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   align-items: center;
+  .describe{
+    width: 96%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 4px 10px;
+    color: $darker-font;
+  }
   .typesInStatistics-tab-wrapper{
     margin: 0;
     padding: 0;
-    width: 94vw;
+    width: 96%;
 
     .typesInStatistics-tabs{
       margin: 0;

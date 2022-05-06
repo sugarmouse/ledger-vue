@@ -23,7 +23,7 @@
 
 <script lang="ts">
   export default {
-    name: 'Nav'
+    name: 'Nav',
   };
 </script>
 

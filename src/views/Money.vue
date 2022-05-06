@@ -131,6 +131,7 @@
     flex-grow: 1;
     background-color: #000000;
     display: flex;
+    width: 100%;
     justify-content: flex-start;
     align-items: flex-start;
   }

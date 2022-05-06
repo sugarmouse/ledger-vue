@@ -109,8 +109,8 @@
     font-family: Consolas, monospace;
     margin:9px 6px;
     text-align: right;
-    height: 60px;
-    line-height: 60px;
+    height: 56px;
+    line-height: 56px;
     background-color: #777777;
   }
 
@@ -120,7 +120,7 @@
 
     > .button-wrapper {
       width: 25%;
-      height: 64px;
+      height: 60px;
       float: left;
       border: none;
       display: flex;
@@ -129,7 +129,7 @@
       padding: 6px;
 
       &.ok {
-        height: 64*2px;
+        height: 60*2px;
         float: right;
       }
 

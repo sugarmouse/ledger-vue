@@ -62,7 +62,6 @@
   flex-direction: column;
   height: 100vh;
   justify-content: flex-end;
-  border: 1px solid red;
   &.ios {
     height: calc(100vh - 54px);
   }

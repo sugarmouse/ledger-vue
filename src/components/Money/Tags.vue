@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="tags-wrapper">
       <div class="selected-tag">
         <span class="describe">选择标签：</span>
@@ -18,6 +17,7 @@
                 <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
               </router-link>
             </li>
+            <li class="hidden"></li>
             <li class="hidden"></li>
             <li class="hidden"></li>
             <li class="hidden"></li>
@@ -42,11 +42,11 @@
             <li class="hidden"></li>
             <li class="hidden"></li>
             <li class="hidden"></li>
+            <li class="hidden"></li>
           </ul>
         </div>
       </div>
     </div>
-  </div>
 
 </template>
 
@@ -113,10 +113,11 @@
 .tags-wrapper {
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   .selected-tag {
-    margin: 10px 20px 0 20px;
-    padding: 8px;
+    margin: 4px 10px 0 10px;
+    padding:2px 14px 2px 8px;
     border-radius: 10px;
     display: flex;
     justify-content: space-between;
@@ -151,7 +152,7 @@
         }
 
         .hidden {
-          width: 60px;
+          width: 50px;
           margin: 4px;
           height: 0;
         }
