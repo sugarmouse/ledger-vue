@@ -1,5 +1,5 @@
 <template>
-  <div class="layout-wrapper">
+  <div class="layout-wrapper" :class=" {ios:isIOS&&'ios'} ">
     <TopBar v-if="hasTopBar" :bar-name="barName" :has-button="hasTopButton" @clickButton="onClickButton"/>
     <div class="content" :class=" classPrefix && `${classPrefix}-content`">
       <slot></slot>
@@ -14,26 +14,58 @@
   import {Component, Prop} from 'vue-property-decorator';
 
   @Component({
-    components:{TopBar}
+    components: {TopBar}
   })
-  export default  class Layout extends Vue{
-    @Prop() classPrefix!:string
-    @Prop() barName!:string
-    @Prop({default:true}) hasTopButton!:boolean
-    @Prop({default:true}) hasTopBar!:boolean
-    @Prop({default:true}) hasNav!:boolean
+  export default class Layout extends Vue {
+    @Prop() classPrefix!: string;
+    @Prop() barName!: string;
+    @Prop({default: true}) hasTopButton!: boolean;
+    @Prop({default: true}) hasTopBar!: boolean;
+    @Prop({default: true}) hasNav!: boolean;
 
-    onClickButton(){
-      this.$emit('clickLeftButton')
+
+
+    onClickButton():void {
+      this.$emit('clickLeftButton');
     }
+
+    get isIOS():boolean {
+      return this.judgeClient() === 'IOS';
+    }
+
+    /*判断客户端*/
+    judgeClient():string {
+      let u = navigator.userAgent;
+      let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+      let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+
+      if (isAndroid) {
+        return 'Android';
+      } else if (isIOS) {
+        return 'IOS';
+      } else {
+        return 'PC';
+      }
+    }
+
+
   }
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/style/helper.scss";
+
+
+
 .layout-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  justify-content: flex-end;
+  border: 1px solid red;
+  &.ios {
+    height: calc(100vh - 54px);
+  }
 }
 
 .content {

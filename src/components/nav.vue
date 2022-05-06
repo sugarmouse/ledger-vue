@@ -31,10 +31,11 @@
 @import "~@/assets/style/helper.scss";
 
 nav {
-  background: linear-gradient(0deg, rgba(0,0,0,0), rgba(0,0,0,1));
+  background: $background;
   display: flex;
   flex-direction: row;
   font-size: 12px;
+  padding-bottom: 10px;
 
   > .item {
     padding: 2px 0;

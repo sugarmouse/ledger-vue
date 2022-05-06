@@ -21,10 +21,9 @@
 @use "sass:math";
 @import "~@/assets/style/helper.scss";
 
-$length: 60px;
+$length: 50px;
 .tagItem-wrapper {
   background: rgba(256, 256, 256);
-  font-size: 40px;
   width: $length;
   height: $length;
   border-radius: math.div($length, 2);
@@ -32,6 +31,9 @@ $length: 60px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  svg{
+    font-size: 30px;
+  }
 
   .tagName {
     font-size: 10px;
