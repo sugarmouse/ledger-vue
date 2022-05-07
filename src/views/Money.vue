@@ -125,6 +125,7 @@
       window.alert('保存成功');
       this.record.notes = '';
       this.record.tag = {name: 'toBeSelected', text: '待选'};
+      this.$router.replace('/home')
     }
   }
 </script>
@@ -147,9 +148,6 @@
     align-items: flex-start;
   }
 
-  .notes {
-    padding: 12px 0;
-  }
 }
 
 

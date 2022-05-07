@@ -197,7 +197,12 @@ $item-color: #111111;
 
   input {
     border: none;
+    white-space: nowrap;
+    overflow: scroll;
     color: $lighter-font;
+    &::-webkit-scrollbar{
+      display: none;
+    }
   }
 
   .type {
@@ -244,13 +249,15 @@ $item-color: #111111;
 
   .amount {
     @extend %flexDistribute;
-    overflow: clip;
+    overflow: hidden;
 
     .describe {
       white-space: nowrap;
     }
 
     .amount-input {
+      border: 1px solid red;
+      flex-shrink: 999999;
       padding-left: $padding-lef;
       background: $item-color;
       font-size: $font-size;
