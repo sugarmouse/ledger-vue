@@ -22,10 +22,12 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: '/money',
+    name:'money',
     component: Money
   },
   {
     path: '/detail',
+    name:'/detail',
     component: Detail
   },
   {
@@ -34,10 +36,12 @@ const routes: Array<RouteConfig> = [
   },
   {
     path:'/incomeTagList',
+    name:'incomeTagList',
     component:IncomeTagList,
   },
   {
     path:'/outgoTagList',
+    name:'outgoTagList',
     component:OutgoTagList
   },
   {

@@ -25,7 +25,8 @@
 
     <div class="tags">
       <Tags :selected-tag="record.tag"
-            :type="record.type"
+            :type="record.type "
+            :back-notes="record.notes"
             @onTagClick="onUpdateTag"/>
     </div>
 
@@ -45,7 +46,6 @@
   import NumberPad from '@/components/Money/NumberPad.vue';
   import FormItem from '@/components/FormItem.vue';
   import Tags from '@/components/Money/Tags.vue';
-  import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import store from '@/store';
   import Tabs from '@/components/tabs.vue';
@@ -53,12 +53,27 @@
   import TabBar from '@/components/TopBar.vue';
   import defaultTagList from '@/constants/defaultTagList';
   import _ from 'lodash';
+  import {mixins} from 'vue-class-component';
+  import {UrlParamsHandler} from '@/mixins/UrlParamsHandler';
 
   @Component({
     components: {TabBar, Tabs, Tags, FormItem, NumberPad},
   })
-  export default class Money extends Vue {
+  export default class Money extends mixins(UrlParamsHandler) {
+    created(): void {
+      store.commit('fetchRecords');
+      if (this.newTag) this.record.tag = this.newTag;
+      if (this.cachedType !== 'paramsUndefined' && (this.cachedType === '-' || this.cachedType === '+')) this.record.type = this.cachedType;
+      if (this.cachedNotes && this.cachedNotes !== 'paramsUndefined') this.record.notes = this.cachedNotes;
+    }
 
+    get cachedType(){
+      return this.urlParamsHandle(this.$route.query.type, 'paramsUndefined');
+    }
+
+    get cachedNotes() {
+      return this.urlParamsHandle(this.$route.query.backNotes, 'paramsUndefined');
+    }
     get newTagName(): string | (string | null)[] {
       return this.$route.query.tagName;
     }
@@ -86,10 +101,6 @@
       return store.state.recordList;
     }
 
-    created(): void {
-      store.commit('fetchRecords');
-      if (this.newTag) this.record.tag = this.newTag;
-    }
 
     goBack(): void {
       this.$router.push('/home');

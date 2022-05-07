@@ -29,7 +29,9 @@
   export default class OutgoTagList extends mixins(TagHelper) {
     @Prop({required: true}) barName!: string;
     @Prop({required: true}) type!: '-' | '+';
-    @Prop() backUrl!: string;
+    @Prop({required:true}) backUrl!: string;
+    @Prop() backAmount?:string
+    @Prop() backNotes?:string
 
 
     created(): void {
@@ -69,7 +71,9 @@
         path: this.backUrl,
         query: {
           tagName: tagName,
-          type: type,
+          type: this.type,
+          backAmount:this.backAmount,
+          backNotes:this.backNotes
         }
       });
     }

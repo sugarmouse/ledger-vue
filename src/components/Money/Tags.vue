@@ -13,7 +13,12 @@
               <TagItem :tag="tag"/>
             </li>
             <li class="tag more">
-              <router-link to="/outgoTagList?from=/money">
+              <router-link  :to="{
+                     name:'outgoTagList',
+                     query:{
+                       from:`/money`,
+                       backNotes:backNotes,
+                   }}">
                 <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
               </router-link>
             </li>
@@ -33,7 +38,12 @@
               <TagItem :tag="tag"/>
             </li>
             <li class="tag more">
-              <router-link to="/incomeTagList?from=/money">
+              <router-link :to="{
+                     name:'incomeTagList',
+                     query:{
+                       from:`/money`,
+                       backNotes:backNotes,
+                   }}">
                 <TagItem :tag="{name:'more',text:'更多'}" class-prefix="more"/>
               </router-link>
             </li>
@@ -62,7 +72,8 @@
   })
   export default class Tags extends mixins(TagHelper) {
     @Prop() type!: '-' | '+';
-    @Prop() selectedTag!:Tag
+    @Prop() selectedTag!:Tag;
+    @Prop() backNotes!:string;
 
     get tagList(): Tag[] {
       return store.state.tagList;

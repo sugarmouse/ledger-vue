@@ -6,7 +6,7 @@
         <li class="group-tags-wrapper" v-for="(groupedRecords,index) in groupedList" :key="index">
           <h3 class="title">{{ beautifyDate(groupedRecords.title) }} <span>{{ groupedRecords.total }}</span></h3>
           <ol>
-            <li v-for="record in groupedRecords.items" :key="record.createdAt" class="record">
+            <li v-for="record in groupedRecords.items" :key="record.id" class="record">
               <router-link :to=" `/detail/edit/${record.id}` ">
                 <TagItem :tag="{name:record.tag.name, text:record.tag.text}"/>
                 <span class="notes">{{ record.notes }}</span>
@@ -15,7 +15,6 @@
                   }}￥{{ record.amount }}</span>
               </router-link>
             </li>
-
           </ol>
         </li>
       </ol>

@@ -21,11 +21,25 @@
         <TagItem class-prefix="edit" :tag="currentRecord.tag"/>
       </div>
 
-      <router-link v-if="this.currentRecord.type==='-'" :to=" `/outgoTagList?from=/detail/edit/${currentRecord.id}` ">
+      <router-link v-if="this.currentRecord.type==='-'"
+                   :to="{
+                     name:'outgoTagList',
+                     query:{
+                       from:`/detail/edit/${currentRecord.id}`,
+                       backAmount: currentRecord.amount.toString(),
+                       backNotes:currentRecord.notes,
+                   }}">
+
         <Icon name="right"/>
       </router-link>
       <router-link v-if="this.currentRecord.type==='+'"
-                   :to=" `/incomeTagList?from=/detail/edit/${currentRecord.id}` ">
+                   :to="{
+                     name:'incomeTagList',
+                     query:{
+                       from:`/detail/edit/${currentRecord.id}`,
+                       backAmount: currentRecord.amount.toString(),
+                       backNotes:currentRecord.notes,
+                   }}">
         <Icon name="right"/>
       </router-link>
     </div>
@@ -59,11 +73,12 @@
   import TagItem from '@/components/TagItem.vue';
   import FormItem from '@/components/FormItem.vue';
   import defaultTagList from '@/constants/defaultTagList';
+  import {UrlParamsHandler} from '@/mixins/UrlParamsHandler';
 
   @Component({
     components: {TagItem, Tabs, FormItem}
   })
-  export default class EditRecord extends mixins(RecordHelper) {
+  export default class EditRecord extends mixins(RecordHelper, UrlParamsHandler) {
     id = parseInt(this.$route.params.id);
     typeData = typeData;
 
@@ -74,7 +89,14 @@
         this.$router.replace('/error');
       } else {
         this.currentRecord.tag = this.newTag;
+        if (this.cachedType !== 'paramsUndefined' && (this.cachedType === '-' || this.cachedType === '+')) this.currentRecord.type = this.cachedType;
+        if (this.cachedAmount && this.cachedAmount !== 'paramsUndefined') this.currentRecord.amount = parseFloat(this.cachedAmount);
+        if (this.cachedNotes && this.cachedNotes !== 'paramsUndefined') this.currentRecord.notes = this.cachedNotes;
       }
+    }
+
+    get cachedType(){
+      return this.urlParamsHandle(this.$route.query.type, 'paramsUndefined');
     }
 
     get currentRecord(): RecordItem | 'currentRecord error' {
@@ -88,6 +110,14 @@
 
     get newTagName(): string {
       return (typeof (this.$route.query.tagName) === 'string') ? this.$route.query.tagName : 'notFound';
+    }
+
+    get cachedAmount() {
+      return this.urlParamsHandle(this.$route.query.backAmount, 'paramsUndefined');
+    }
+
+    get cachedNotes() {
+      return this.urlParamsHandle(this.$route.query.backNotes, 'paramsUndefined');
     }
 
     get newTag(): Tag | 'get newTag error' {
@@ -120,7 +150,7 @@
         store.commit('createRecord', this.currentRecord);
         this.$router.replace('/detail');
       }
-      // todo 选择不修改后数据复原
+
     }
 
     onDelete(): void {
