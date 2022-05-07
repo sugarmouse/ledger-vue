@@ -5,9 +5,12 @@
           @clickLeftButton="goBack">
     <div class="amount">
       <span class="describe">金额 </span>
-      <input type="number"
+      <input type="text"
              class="amount-input"
-             v-model="currentRecord.amount"/>
+             :value="stringAmount"
+             @input="numberVerify($event)"/>
+      <!--             v-model="currentRecord.amount"-->
+
     </div>
     <div class="createdAt">
       <span class="describe">日期</span>
@@ -81,9 +84,10 @@
   export default class EditRecord extends mixins(RecordHelper, UrlParamsHandler) {
     id = parseInt(this.$route.params.id);
     typeData = typeData;
-
+    stringAmount = '0';
 
     created(): void {
+      this.stringAmount = this.tempStingAmount
       this.$store.commit('fetchRecords');
       if (this.newTag === 'get newTag error' || this.currentRecord === 'currentRecord error') {
         this.$router.replace('/error');
@@ -95,7 +99,15 @@
       }
     }
 
-    get cachedType(){
+    get tempStingAmount() {
+      if (this.currentRecord !== 'currentRecord error') {
+        return this.currentRecord.amount.toString();
+      } else {
+        return '0';
+      }
+    }
+
+    get cachedType() {
       return this.urlParamsHandle(this.$route.query.type, 'paramsUndefined');
     }
 
@@ -133,6 +145,44 @@
       return store.state.recordList;
     }
 
+    numberVerify($event: InputEvent) {
+      let $input = $event.target as HTMLInputElement;
+      let newValue = $input.value;
+      const inputChar = $event.data;
+
+
+      function isNumber(params: any) {
+        return /^\d$/.test(params);
+      }
+      if (newValue.split('')[0] === '0' && inputChar !== '.') {
+        if (newValue.length <= 2) $input.value = parseFloat(newValue).toString();
+      }
+      if (inputChar) {
+        if (inputChar === '.') {
+          // 第一个字符输入 '.', 变为 0
+          if ($input.value.split('')[0] === inputChar) {
+            this.$nextTick(() => {
+              $input.value = '0';
+            });
+          }
+          this.$nextTick()
+          if ($input.value.slice(0, $input.value.length - 1).split('').indexOf(inputChar) > 0) {
+            this.$nextTick(() => {
+              $input.value = $input.value.slice(0, $input.value.length - 1);
+            });
+          }
+        }
+        if (!isNumber(inputChar) && inputChar !== '.') {
+          this.$nextTick(() => {
+            $input.value = $input.value.slice(0, $input.value.length - 1);
+          });
+        }
+      }
+      this.$nextTick(()=>{
+        this.stringAmount = $input.value
+      })
+    }
+
 
     findRecord(id: number): RecordItem | 'findRecord error' {
       const record = _.find(this.recordList, record => record.id === id);
@@ -146,7 +196,10 @@
     onModify(): void {
       const willModify = window.confirm('确认修改?');
       if (willModify) {
-        if (this.currentRecord !== 'currentRecord error') store.commit('deleteRecord', this.currentRecord.id);
+        if (this.currentRecord !== 'currentRecord error') {
+          store.commit('deleteRecord', this.currentRecord.id);
+          this.currentRecord.amount = parseFloat(this.stringAmount);
+        }
         store.commit('createRecord', this.currentRecord);
         this.$router.replace('/detail');
       }
@@ -187,6 +240,8 @@ $item-color: #111111;
   justify-content: space-between;
   align-items: center;
   font-size: 30px;
+  max-width: 100vw;
+  overflow: hidden;
   padding: 4vh 10px 0 10px;
 
 
@@ -200,7 +255,8 @@ $item-color: #111111;
     white-space: nowrap;
     overflow: scroll;
     color: $lighter-font;
-    &::-webkit-scrollbar{
+
+    &::-webkit-scrollbar {
       display: none;
     }
   }
@@ -256,14 +312,11 @@ $item-color: #111111;
     }
 
     .amount-input {
-      border: 1px solid red;
       flex-shrink: 999999;
       padding-left: $padding-lef;
       background: $item-color;
       font-size: $font-size;
     }
-
-
   }
 
   .createdAt, .notes {
@@ -278,7 +331,6 @@ $item-color: #111111;
         }
       }
     }
-
   }
 
 
@@ -308,9 +360,7 @@ $item-color: #111111;
       color: $basic-font;
     }
 
-
   }
-
 
 }
 

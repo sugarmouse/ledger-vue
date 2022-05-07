@@ -60,6 +60,7 @@
   padding-left: 6px;
   display: flex;
   align-items: center;
+  overflow: hidden;
 
   .name {
     display: flex;
@@ -84,6 +85,10 @@
     background: transparent;
     border: none;
     padding: 0 16px;
+    overflow: scroll;
+    &::-webkit-scrollbar{
+      display: none;
+    }
 
   }
 
